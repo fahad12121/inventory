@@ -721,131 +721,6 @@
                 </div>
                 <!--/ Payment History -->
 
-
-                <!-- Most Sales in Countries -->
-                <div class="col-lg-4 col-md-6 order-2 order-lg-0">
-                    <div class="card h-100">
-                        <div class="card-header d-flex align-items-center justify-content-between">
-                            <h5 class="card-title m-0 me-2">Most Sales in Countries</h5>
-                            <div class="dropdown">
-                                <button class="btn p-0" type="button" id="mostSales" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <i class="mdi mdi-dots-vertical mdi-24px"></i>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="mostSales">
-                                    <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body py-0">
-                            <div class="mb-4 mt-1">
-                                <div class="d-flex align-items-center">
-                                    <h1 class="mb-0 me-3 display-3">22,842</h1>
-                                    <div class="badge bg-label-success rounded-pill">+42%</div>
-                                </div>
-                                <small class="mt-1">Sales Last 90 Days</small>
-                            </div>
-                            <div class="table-responsive text-nowrap border-top">
-                                <table class="table">
-                                    <tbody class="table-border-bottom-0">
-                                        <tr>
-                                            <td class="ps-0 pe-5"><span class="text-heading">Australia</span></td>
-                                            <td class="text-end"><span class="text-heading fw-medium">18,879</span></td>
-                                            <td class="pe-0">
-                                                <div class="d-flex align-items-center justify-content-end">
-                                                    <span class="text-heading fw-medium me-2">15%</span>
-                                                    <i class="mdi mdi-chevron-down mdi-20px text-danger"></i>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="ps-0 pe-5"><span class="text-heading">Canada</span></td>
-                                            <td class="text-end"><span class="text-heading fw-medium">10,357</span></td>
-                                            <td class="pe-0">
-                                                <div class="d-flex align-items-center justify-content-end">
-                                                    <span class="text-heading fw-medium me-2">85%</span>
-                                                    <i class="mdi mdi-chevron-up mdi-20px text-success"></i>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="ps-0 pe-5"><span class="text-heading">India</span></td>
-                                            <td class="text-end"><span class="text-heading fw-medium">4,860</span></td>
-                                            <td class="pe-0">
-                                                <div class="d-flex align-items-center justify-content-end">
-                                                    <span class="text-heading fw-medium me-2">48%</span>
-                                                    <i class="mdi mdi-chevron-up mdi-20px text-success"></i>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="ps-0 pe-5"><span class="text-heading">France</span></td>
-                                            <td class="text-end"><span class="text-heading fw-medium">2,560</span></td>
-                                            <td class="pe-0">
-                                                <div class="d-flex align-items-center justify-content-end">
-                                                    <span class="text-heading fw-medium me-2">36%</span>
-                                                    <i class="mdi mdi-chevron-up mdi-20px text-success"></i>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="ps-0 pe-5"><span class="text-heading">United State</span></td>
-                                            <td class="text-end"><span class="text-heading fw-medium">899</span></td>
-                                            <td class="pe-0">
-                                                <div class="d-flex align-items-center justify-content-end">
-                                                    <span class="text-heading fw-medium me-2">16%</span>
-                                                    <i class="mdi mdi-chevron-down mdi-20px text-danger"></i>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="ps-0 pe-5"><span class="text-heading">Japan</span></td>
-                                            <td class="text-end"><span class="text-heading fw-medium">43</span></td>
-                                            <td class="pe-0">
-                                                <div class="d-flex align-items-center justify-content-end">
-                                                    <span class="text-heading fw-medium me-2">35%</span>
-                                                    <i class="mdi mdi-chevron-up mdi-20px text-success"></i>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="ps-0 pe-5"><span class="text-heading">Brazil</span></td>
-                                            <td class="text-end"><span class="text-heading fw-medium">18</span></td>
-                                            <td class="pe-0">
-                                                <div class="d-flex align-items-center justify-content-end">
-                                                    <span class="text-heading fw-medium me-2">12%</span>
-                                                    <i class="mdi mdi-chevron-up mdi-20px text-success"></i>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--/ Most Sales in Countries -->
-
-                <!-- Roles Datatables -->
-                <div class="col-lg-8 col-12">
-                    <div class="card">
-                        <div class="table-responsive rounded-3">
-                            <table class="datatables-crm table table-sm">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="py-3"></th>
-                                        <th class="py-3">User</th>
-                                        <th class="py-3">Email</th>
-                                        <th class="py-3">Role</th>
-                                        <th class="py-3">Status</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -853,6 +728,8 @@
     <!-- / Content -->
 
     <!-- Footer -->
+    @include('backend.admin.layouts.footer')
+
     <!-- Footer-->
 
     <!--/ Footer-->

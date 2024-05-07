@@ -124,7 +124,7 @@
                                       </div>
                                       <div class="flex-grow-1">
                                           <span class="fw-medium d-block">
-                                              John Doe
+                                            {{ Auth::user()->name }}
                                           </span>
                                           <small class="text-muted">Admin</small>
                                       </div>
@@ -142,10 +142,15 @@
                           </li>
 
                           <li>
-                              <a class="dropdown-item" href="../auth/login-basic.html">
+                              <a class="dropdown-item" href="{{ route('logout') }}"
+                                  onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();">
                                   <i class='mdi mdi-login me-2'></i>
-                                  <span class="align-middle">Login</span>
+                                  <span class="align-middle">Logout</span>
                               </a>
+                              <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                  @csrf
+                              </form>
                           </li>
                       </ul>
                   </li>
