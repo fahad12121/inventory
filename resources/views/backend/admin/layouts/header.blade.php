@@ -19,7 +19,7 @@
                   <div class="nav-item navbar-search-wrapper mb-0">
                       <a class="nav-item nav-link search-toggler fw-normal px-0" href="javascript:void(0);">
                           <i class="mdi mdi-magnify mdi-24px scaleX-n1-rtl"></i>
-                          <span class="d-none d-md-inline-block text-muted">Search (Ctrl+/)</span>
+                          <span class="d-none d-md-inline-block text-muted">Search</span>
                       </a>
                   </div>
               </div>
@@ -109,7 +109,8 @@
                       <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
                           data-bs-toggle="dropdown">
                           <div class="avatar avatar-online">
-                              <img src="../../demo/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle">
+                              <img src="{{ asset('demo/assets/img/avatars/1.png') }}" alt
+                                  class="w-px-40 h-auto rounded-circle">
                           </div>
                       </a>
                       <ul class="dropdown-menu dropdown-menu-end">
@@ -118,13 +119,13 @@
                                   <div class="d-flex">
                                       <div class="flex-shrink-0 me-3">
                                           <div class="avatar avatar-online">
-                                              <img src="../../demo/assets/img/avatars/1.png" alt
+                                              <img src="{{ asset('demo/assets/img/avatars/1.png') }}" alt
                                                   class="w-px-40 h-auto rounded-circle">
                                           </div>
                                       </div>
                                       <div class="flex-grow-1">
                                           <span class="fw-medium d-block">
-                                            {{ Auth::user()->name }}
+                                              {{ Auth::user()->name }}
                                           </span>
                                           <small class="text-muted">Admin</small>
                                       </div>
