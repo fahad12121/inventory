@@ -12,7 +12,10 @@ class BrandController extends Controller
      */
     public function index()
     {
-        //
+        $brands = Brand::select('id', 'name')
+            ->orderBy('id', 'desc')
+            ->get();
+        return view('backend.admin.pages.product.brand.index', compact('brands'));
     }
 
     /**
@@ -28,7 +31,27 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $id = $request->id;
+            if ($id) {
+                $brand = Brand::find($id)->update($request->all());
+                if ($brand) {
+                    // Return a response if needed
+                    return response()->json(['message' => 'Brand Updated successfully'], 200);
+                }
+            } else {
+                // Store the data in the database
+                $brand = new Brand();
+                $brand->name = $request->name;
+                $brand->save();
+
+                // Return a response if needed
+                return response()->json(['message' => 'Brand stored successfully'], 200);
+            }
+        } catch (\Illuminate\Database\QueryException $ex) {
+            // Return an error response
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
     }
 
     /**
@@ -58,8 +81,10 @@ class BrandController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Brand $brand)
+    public function destroy(Brand $brand, Request $request)
     {
-        //
+        $brand = Brand::find($request->id);
+        $brand->delete();
+        return response()->json(['status' => 'Record Deleted Successfully']);
     }
 }

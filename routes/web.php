@@ -34,5 +34,6 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
 
     Route::resource('parentcategory', ParentCategoryController::class);
     Route::resource('category', CategoryController::class);
+    Route::resource('brand', BrandController::class);
     Route::resource('product', ProductController::class);
 });
