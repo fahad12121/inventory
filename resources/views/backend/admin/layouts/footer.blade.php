@@ -1,18 +1,12 @@
-<footer class="content-footer footer bg-footer-theme">
-    <div class="container-xxl">
-      <div class="footer-container d-flex align-items-center justify-content-between py-3 flex-md-row flex-column">
-        <div class="mb-2 mb-md-0">
-          © <script>
-              document.write(new Date().getFullYear())
-          </script>,
-          made with <span class="text-danger"><i class="tf-icons mdi mdi-heart"></i></span> by <a href="https://pixinvent.com/" target="_blank" class="footer-link fw-medium">Pixinvent</a>
-        </div>
-        <div class="d-none d-lg-inline-block">
-          <a href="https://themeforest.net/licenses/standard" class="footer-link me-4" target="_blank">License</a>
-          <a href="https://1.envato.market/pixinvent_portfolio" target="_blank" class="footer-link me-4">More Themes</a>
-          <a href="https://demos.pixinvent.com/materialize-html-admin-template/documentation/laravel-introduction.html" target="_blank" class="footer-link me-4">Documentation</a>
-          <a href="https://pixinvent.ticksy.com/" target="_blank" class="footer-link d-none d-sm-inline-block">Support</a>
-        </div>
-      </div>
-    </div>
-  </footer>
+<footer class="footer footer-static footer-light navbar-border navbar-shadow">
+    <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2">
+        <span class="float-md-left d-block d-md-inline-block">Copyright &copy;
+            <script>
+                document.write(new Date().getFullYear())
+            </script>
+        </span> <a class="text-bold-800 grey darken-2" href="#" target="_blank">PIXINVENT </a>, All rights reserved.
+        </span>
+        <span class="float-md-right d-block d-md-inline-blockd-none d-lg-block">Hand-crafted & Made with <i
+                class="ft-heart pink"></i></span>
+    </p>
+</footer>

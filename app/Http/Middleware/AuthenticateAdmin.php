@@ -19,6 +19,6 @@ class AuthenticateAdmin
             return $next($request);
         }
 
-        return redirect()->route('/');
+        return redirect()->route('login');
     }
 }
