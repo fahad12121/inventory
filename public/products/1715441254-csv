@@ -1,0 +1,2 @@
+make,model,color,vehicle year,vehicle category,plate source,plate number,license expiry date,insurance expiry date,insurance provider name,chassis number,current Odometer,daily Odometer limit,Odometer fee per unit,current location,current status,depriciation
+honda,2022,reddish,2022,Sport,Dubai,V-1232,30/01/2024,30/01/2024,fahad,42423,10000,200,400,home,Available,3

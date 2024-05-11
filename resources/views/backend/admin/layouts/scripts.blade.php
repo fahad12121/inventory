@@ -10,6 +10,8 @@
   <script src="{{ asset('app-assets/vendors/js/charts/jvector/jquery-jvectormap-world-mill.js') }}"
       type="text/javascript"></script>
   <script src="{{ asset('app-assets/data/jvector/visitor-data.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}" type="text/javascript">
+  </script>
   <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}" type="text/javascript"></script>
   <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert.min.js') }}" type="text/javascript"></script>
   <script src="{{ asset('app-assets/vendors/js/extensions/toastr.min.js') }}" type="text/javascript"></script>
@@ -23,8 +25,7 @@
   @if (current_route() == 'admin.dashboard')
       <script src="{{ asset('app-assets/js/scripts/pages/dashboard-sales.js') }}" type="text/javascript"></script>
   @endif
-  <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}" type="text/javascript">
-  </script>
+
   <script src="{{ asset('app-assets/js/scripts/extensions/sweet-alerts.js') }}" type="text/javascript"></script>
   <script src="{{ asset('app-assets/js/scripts/extensions/toastr.js') }}" type="text/javascript"></script>
   <!-- END PAGE LEVEL JS-->

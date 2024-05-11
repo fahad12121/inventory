@@ -15,7 +15,10 @@ class BrandController extends Controller
         $brands = Brand::select('id', 'name')
             ->orderBy('id', 'desc')
             ->get();
-        return view('backend.admin.pages.product.brand.index', compact('brands'));
+
+        return response()->json([
+            "data" => $brands
+        ]);
     }
 
     /**
@@ -86,5 +89,10 @@ class BrandController extends Controller
         $brand = Brand::find($request->id);
         $brand->delete();
         return response()->json(['status' => 'Record Deleted Successfully']);
+    }
+
+    public function fetchBrands()
+    {
+        return view('backend.admin.pages.product.brand.index');
     }
 }

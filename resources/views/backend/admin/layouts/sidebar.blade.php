@@ -20,10 +20,10 @@
                             href="{{ route('admin.category.index') }}" data-i18n="nav.dash.crypto">Category</a>
                     </li>
                     <li class="{{ current_route() == 'admin.brand.index' ? 'active' : '' }}"><a class="menu-item"
-                            href="{{ route('admin.brand.index') }}" data-i18n="nav.dash.crypto">Brands</a>
+                            href="{{ route('admin.brand.fetfetchs') }}" data-i18n="nav.dash.crypto">Brands</a>
                     </li>
                     <li class="{{ current_route() == 'admin.product.index' ? 'active' : '' }}"><a class="menu-item"
-                            href="{{ route('admin.product.index') }}" data-i18n="nav.dash.sales">Product</a>
+                            href="{{ route('admin.product.fetchProduct') }}" data-i18n="nav.dash.sales">Product</a>
                     </li>
                 </ul>
             </li>

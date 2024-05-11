@@ -31,7 +31,7 @@
                                 <div class="card-content collapse show">
                                     <div class="card-body card-dashboard">
 
-                                        <table class="table table-striped table-bordered zero-configuration">
+                                        <table class="table table-striped table-bordered " id="brandsTable">
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
@@ -40,17 +40,8 @@
 
                                                 </tr>
                                             </thead>
-                                            <tbody id="categoryTableBody">
-                                                @foreach ($brands as $item)
-                                                    <tr>
-                                                        <input type="hidden" class="delete_val"
-                                                            value="{{ $item->id }}">
-                                                        <td>{{ $item->id }}</td>
-                                                        <td>{{ $item->name }}</td>
-                                                        <td><a class="editBtn"><i class="ft-edit text-info"></i> </a> <a
-                                                                class="" id="cancel-button"><i class="ft-trash text-danger"></i></a></td>
-                                                    </tr>
-                                                @endforeach
+                                            <tbody>
+
                                                 <!-- Table rows will be dynamically added here -->
                                             </tbody>
 
@@ -102,12 +93,35 @@
     </div>
 
 @section('scripts')
+    <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}" type="text/javascript"></script>
     <script>
         $(document).ready(function() {
+
+
+            // Function to fetch brands data via AJAX and populate DataTable
+            var table = $('#brandsTable').DataTable({
+                ajax: "{{ route('admin.brand.index') }}",
+                columns: [{
+                        "data": "id"
+                    },
+                    {
+                        "data": "name"
+                    },
+                    {
+                        "data": null,
+                        render: function(data, row, type) {
+                            return `<a class="editBtn" data-id="${row.id}"><i class="ft-edit text-info"></i> </a> <a
+                             class="" id="cancel-button" data-id="${row.id}"><i class="ft-trash text-danger"></i></a>`
+                        }
+                    }
+
+                ]
+            });
+
             let id = ''
             let lastModalType = ''; // Variable to store the last opened modal type
-            // Event handler for edit button click
-            $('.editBtn').on('click', function() {
+            // edit city code goes here
+            $(document).on('click', '.editBtn', function() {
                 var row = $(this).closest('tr');
                 id = row.find('td:eq(0)').text();
                 var name = row.find('td:eq(1)').text();
@@ -116,7 +130,9 @@
                 $('#id').val(id);
                 $('#name').val(name);
                 $('#default').modal('show');
-            });
+            })
+
+
 
             // Event handler for opening the modal
             $('#default').on('show.bs.modal', function() {
@@ -164,9 +180,12 @@
                         // Handle success response
                         console.log(response);
                         btn.removeClass('loading'); // Remove loading class from the button
+                        table.ajax.reload();
+
                         $('#default').modal(
                             'hide'); // Hide the modal after successful submission
-                        location.reload(); // Reload the window
+                        // Refresh the content of the tbody element
+
                     },
                     error: function(xhr) {
                         // Handle error response
@@ -176,19 +195,18 @@
                 });
             });
 
-            
+
 
             //Delete Modal Working
+            $(document).on('click', '#cancel-button', function() {
+                var row = $(this).closest('tr');
+                var delete_id = row.find('td:eq(0)').text();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $('#cancel-button').click(function(e) {
-                e.preventDefault();
-                var delete_id = $(this).closest("tr").find('.delete_val').val();
                 swal({
                         title: "Are you sure?",
                         text: "Once deleted, you will not be able to recover this data!",
@@ -216,14 +234,14 @@
                                                 icon: "success",
                                             })
                                             .then((result) => {
-                                                location.reload();
+                                                table.ajax.reload();
                                             });
                                     } else {
                                         swal(response.error, {
                                                 icon: "error",
                                             })
                                             .then((result) => {
-                                                location.reload();
+                                                table.ajax.reload();
                                             });
                                     }
                                 }
@@ -234,8 +252,8 @@
                         }
                     });
 
+            })
 
-            });
         });
     </script>
 @endsection

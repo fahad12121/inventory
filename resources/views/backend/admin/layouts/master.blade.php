@@ -4,10 +4,17 @@
 
 <body class="vertical-layout vertical-menu 2-columns   menu-expanded fixed-navbar" data-open="click"
     data-menu="vertical-menu" data-col="2-columns">
-    @include('backend.admin.layouts.header')
-    @include('backend.admin.layouts.sidebar')
-    @yield('content')
-    @include('backend.admin.layouts.footer')
+    <div class="wrapper">
+        @include('backend.admin.layouts.header')
+
+        @include('backend.admin.layouts.sidebar')
+
+        @yield('content')
+
+        @include('backend.admin.layouts.footer')
+    </div>
+
+
     @include('backend.admin.layouts.scripts')
 </body>
 
