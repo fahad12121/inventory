@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Branch;
+use App\Models\SedRec;
 use Illuminate\Http\Request;
 
-class BranchController extends Controller
+class SedRecController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $branches = Branch::orderBy('id', 'desc')
+        $senrec = SedRec::orderBy('id', 'desc')
             ->get();
 
         return response()->json([
-            "data" => $branches
+            "data" => $senrec
         ]);
     }
 
@@ -36,27 +36,27 @@ class BranchController extends Controller
         try {
             $id = $request->id;
             if ($id) {
-                $branch = Branch::find($id);
-                $branch->name = $request->name;
-                $branch->email = $request->email;
-                $branch->phone = $request->phone;
-                $branch->address = $request->address;
-                $branch->save();
-                if ($branch) {
+                $senrec = SedRec::find($id);
+                $senrec->name = $request->name;
+                $senrec->email = $request->email;
+                $senrec->phone = $request->phone;
+                $senrec->address = $request->address;
+                $senrec->save();
+                if ($senrec) {
                     // Return a response if needed
-                    return response()->json(['message' => 'Branch Updated successfully'], 200);
+                    return response()->json(['message' => 'Record Updated successfully'], 200);
                 }
             } else {
                 // Store the data in the database
-                $branch = new Branch();
-                $branch->name = $request->name;
-                $branch->email = $request->email;
-                $branch->phone = $request->phone;
-                $branch->address = $request->address;
-                $branch->save();
+                $senrec = new SedRec();
+                $senrec->name = $request->name;
+                $senrec->email = $request->email;
+                $senrec->phone = $request->phone;
+                $senrec->address = $request->address;
+                $senrec->save();
 
                 // Return a response if needed
-                return response()->json(['message' => 'Branch stored successfully'], 200);
+                return response()->json(['message' => 'Record stored successfully'], 200);
             }
         } catch (\Illuminate\Database\QueryException $ex) {
             // Return an error response
@@ -67,7 +67,7 @@ class BranchController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Branch $branch)
+    public function show(SedRec $sedRec)
     {
         //
     }
@@ -75,7 +75,7 @@ class BranchController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Branch $branch)
+    public function edit(SedRec $sedRec)
     {
         //
     }
@@ -83,7 +83,7 @@ class BranchController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Branch $branch)
+    public function update(Request $request, SedRec $sedRec)
     {
         //
     }
@@ -91,15 +91,15 @@ class BranchController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Branch $branch)
+    public function destroy(SedRec $sedRec)
     {
-        $branch = Branch::find($request->id);
-        $branch->delete();
+        $senrec = SedRec::find($request->id);
+        $senrec->delete();
         return response()->json(['status' => 'Record Deleted Successfully']);
     }
 
-    public function fetchbranches(Request $request)
+    public function fetchSendRec(Request $request)
     {
-        return view('backend.admin.pages.users.branch.index');
+        return view('backend.admin.pages.users.senderreceiver.index');
     }
 }

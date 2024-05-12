@@ -102,8 +102,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product, Request $request)
     {
-        $brand = Product::find($request->id);
-        $brand->delete();
+        $product = Product::find($request->id);
+        $product->delete();
         return response()->json(['status' => 'Record Deleted Successfully']);
     }
 

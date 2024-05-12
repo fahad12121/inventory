@@ -14,6 +14,7 @@
   <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}" type="text/javascript"></script>
   <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert.min.js') }}" type="text/javascript"></script>
   <script src="{{ asset('app-assets/vendors/js/extensions/toastr.min.js') }}" type="text/javascript"></script>
+  
   <!-- END PAGE VENDOR JS-->
   <!-- BEGIN MODERN JS-->
   <script src="{{ asset('app-assets/js/core/app-menu.js') }}" type="text/javascript"></script>

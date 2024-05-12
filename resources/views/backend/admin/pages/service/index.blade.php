@@ -1,6 +1,6 @@
 @extends('backend.admin.layouts.master')
 @section('title')
-    {{ __('Sender Receivers ') }}
+    {{ __('Services') }}
 @endsection
 @section('content')
     <div class="app-content content">
@@ -16,31 +16,27 @@
                                 <div class="card-header">
                                     <div class="row">
                                         <div class="col-md-10">
-                                            <h4 class="card-title">Sender/Receiver</h4>
+                                            <h4 class="card-title">Services</h4>
 
                                         </div>
 
-
                                         <div class="col-md-2">
                                             <button type="button" id="addBtn" class="btn btn-outline-primary block"
-                                                data-toggle="modal" data-target="#default" onclick="addModal()">
+                                                data-toggle="modal" data-target="#default">
                                                 +Add
                                             </button>
-
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card-content collapse show">
                                     <div class="card-body card-dashboard">
 
-                                        <table class="table table-striped table-bordered" id="senRecTabel">
+                                        <table class="table table-striped table-bordered" id="serviceTabel">
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Name</th>
-                                                    <th>Email</th>
-                                                    <th>Phone</th>
-                                                    <th>Address</th>
+                                                    <th>Created At</th>
                                                     <th>Actions</th>
 
                                                 </tr>
@@ -65,37 +61,21 @@
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="myModalLabel1">Add Sender/Receiver</h4>
+                                <h4 class="modal-title" id="myModalLabel1">Add Service</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form class="row g-3" id="addSenRecForm">
+                                <form class="row g-3" id="addServiceForm">
                                     @csrf
                                     <input type="hidden" name="id" id="id">
-
 
                                     <div class="col-md-4">
                                         <label for="name" class="form-label">Name</label> <span
                                             class="text-danger">*</span>
                                         <input type="text" class="form-control" name="name" id="name">
                                         <div id="nameError" class="text-danger"></div>
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <label for="email" class="form-label">Email</label> <span
-                                            class="text-danger">*</span>
-                                        <input type="email" class="form-control" name="email" id="email">
-                                        <div id="emailError" class="text-danger"></div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="phone" class="form-label">Phone</label>
-                                        <input type="text" class="form-control" name="phone" id="phone">
-                                    </div>
-                                    <div class="col-md-4 mt-2">
-                                        <label for="address" class="form-label">Address</label>
-                                        <input type="text" class="form-control" name="address" id="address">
                                     </div>
 
                                 </form>
@@ -115,33 +95,36 @@
 @section('scripts')
     <script>
         const editMember = (item) => {
-            $('#myModalLabel1').text('Edit Add Sender/Receiver');
+            $('#myModalLabel1').text('Edit Service');
             $('#id').val(item.id);
             $('#name').val(item.name);
-            $('#email').val(item.email);
-            $('#phone').val(item.phone);
-            $('#address').val(item.address);
-
             // Show modal
             $('#default').modal('show');
 
         }
 
-        const addModal = () => {
-            $('#myModalLabel1').text('Add Sender/Receiver');
-            $('#id').val('');
-            $('#name').val('');
-            $('#email').val('');
-            $('#phone').val('');
-            $('#address').val('');
+        function convertDate(item) {
+            // Create a Date object from the UTC date string
+            var utcDate = new Date(item);
 
+            // Get year, month, day, hours, minutes, and seconds
+            var year = utcDate.getUTCFullYear();
+            var month = ('0' + (utcDate.getUTCMonth() + 1)).slice(-2);
+            var day = ('0' + utcDate.getUTCDate()).slice(-2);
+            var hours = ('0' + utcDate.getUTCHours()).slice(-2);
+            var minutes = ('0' + utcDate.getUTCMinutes()).slice(-2);
+            var seconds = ('0' + utcDate.getUTCSeconds()).slice(-2);
+
+            // Construct the formatted date string
+            var formattedDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+
+            return formattedDateTime;
         }
-
         $(document).ready(function() {
 
             // Function to fetch brands data via AJAX and populate DataTable
-            var table = $('#senRecTabel').DataTable({
-                ajax: "{{ route('admin.sedrec.index') }}",
+            var table = $('#serviceTabel').DataTable({
+                ajax: "{{ route('admin.service.index') }}",
                 columns: [{
                         "data": "id"
                     },
@@ -149,30 +132,64 @@
                         "data": "name"
                     },
                     {
-                        "data": "email"
-                    },
-                    {
-                        "data": "phone"
-                    },
-                    {
-                        "data": "address"
+                        "data": null,
+                        render: function(data, row, type) {
+                            return `<p>${convertDate(data.created_at)}</p>`;
+                        }
                     },
                     {
                         "data": {},
                         render: function(data, row, type) {
-                            return `<a class="edit" data-id="${row.id}" ><i class="ft-edit text-info"></i></a> 
-                            <a class="cancel-button" data-id="${row.id}"><i class="ft-trash text-danger"></i></a>`;
+                            return `<a class="edit" data-id="${row.id}" ><i class="ft-edit text-info"></i></a> <a
+                             class="" id="cancel-button" data-id="${row.id}"><i class="ft-trash text-danger"></i></a>`;
                         }
                     }
 
                 ]
             });
 
-            let id = ''
-            let lastModalType = ''; // Variable to store the last opened modal type
+            $(document).on('click', '.edit', function() {
+
+                var row = $(this).closest('tr');
+                var data = table.row(row).data(); // Assuming you're using DataTables
+                editMember(data);
+            })
+
+
+
+            //Submit Data Modal
+            $('#submitForm').on('click', function() {
+                var btn = $(this); // Cache the button element
+
+                // Disable the button to prevent multiple submissions
+                btn.prop('disabled', true);
+                var name = $('#name').val();
+
+                $.ajax({
+                    url: "{{ route('admin.service.store') }}",
+                    type: 'POST',
+                    data: $('#addServiceForm').serialize(),
+                    success: function(response) {
+                        // Handle success response
+                        toastr.success(response.message);
+                        table.ajax.reload();
+
+                        // Hide the modal after successful submission
+                        $('#default').modal('hide');
+                    },
+                    error: function(xhr) {
+                        // Handle error response
+                        console.log(xhr.responseText);
+                    },
+                    complete: function() {
+                        // Re-enable the button after the AJAX request is complete
+                        btn.prop('disabled', false);
+                    }
+                });
+            });
 
             //Delete Modal Working
-            $(document).on('click', '.cancel-button', function() {
+            $(document).on('click', '#cancel-button', function() {
                 var row = $(this).closest('tr');
                 var delete_id = row.find('td:eq(0)').text();
                 $.ajaxSetup({
@@ -199,7 +216,7 @@
                             $.ajax({
                                 type: "DELETE",
                                 url: get_url(
-                                    "{{ route('admin.sedrec.destroy', 'item_id') }}",
+                                    "{{ route('admin.service.destroy', 'item_id') }}",
                                     delete_id),
                                 data: data,
                                 success: function(response) {
@@ -227,51 +244,6 @@
                     });
 
             })
-
-            $(document).on('click', '.edit', function() {
-
-                var row = $(this).closest('tr');
-                var data = table.row(row).data(); // Assuming you're using DataTables
-                editMember(data);
-            })
-
-
-            //Submit Data Modal
-            $('#submitForm').on('click', function() {
-                var btn = $(this); // Cache the button element
-
-                // Disable the button to prevent multiple submissions
-                btn.prop('disabled', true);
-
-                var category_id = $('#name').val();
-                var brand_id = $('#email').val();
-                var name = $('#phone').val();
-                var imei_number = $('#address').val();
-
-                $.ajax({
-                    url: "{{ route('admin.sedrec.store') }}",
-                    type: 'POST',
-                    data: $('#addSenRecForm').serialize(),
-                    success: function(response) {
-                        // Handle success response
-                        toastr.success(response.message);
-                        table.ajax.reload();
-
-                        // Hide the modal after successful submission
-                        $('#default').modal('hide');
-                    },
-                    error: function(xhr) {
-                        // Handle error response
-                        console.log(xhr.responseText);
-                    },
-                    complete: function() {
-                        // Re-enable the button after the AJAX request is complete
-                        btn.prop('disabled', false);
-                    }
-                });
-            });
-
-
         });
     </script>
 @endsection

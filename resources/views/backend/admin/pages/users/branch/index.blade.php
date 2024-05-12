@@ -172,10 +172,10 @@
             let lastModalType = ''; // Variable to store the last opened modal type
 
             $(document).on('click', '.edit', function() {
-                $('#branchTabel tbody').on('click', 'tr', function() {
-                    var data = table.row(this).data();
-                    editMember(data);
-                });
+
+                var row = $(this).closest('tr');
+                var data = table.row(row).data(); // Assuming you're using DataTables
+                editMember(data);
             })
 
 

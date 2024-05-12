@@ -46,4 +46,16 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
     //Branch Routes
     Route::resource('branch', BranchController::class);
     Route::get('/branches/list', [BranchController::class, 'fetchbranches'])->name('branch.fetchbranch');
+
+    //Sender Receiver Routes
+    Route::resource('sedrec', SedRecController::class);
+    Route::get('/seder/receiver/list', [SedRecController::class, 'fetchSendRec'])->name('sedrec.fetchSendRec');
+
+    //stock issue routes
+    Route::resource('stock', StockController::class);
+    Route::get('/stock-issue/branch/list', [StockController::class, 'fetchStock'])->name('stock.fetchStock');
+
+    //Service Routes
+    Route::resource('service', ServiceController::class);
+    Route::get('/services/list', [ServiceController::class, 'fetchService'])->name('service.fetchService');
 });

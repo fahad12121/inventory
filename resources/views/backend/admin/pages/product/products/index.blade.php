@@ -300,10 +300,10 @@
             });
 
             $(document).on('click', '.edit', function() {
-                $('#productTabel tbody').on('click', 'tr', function() {
-                    var data = table.row(this).data();
-                    editMember(data);
-                });
+
+                var row = $(this).closest('tr');
+                var data = table.row(row).data(); // Assuming you're using DataTables
+                editMember(data);
             })
 
 
@@ -405,6 +405,4 @@
             })
         });
     </script>
-
-
 @endsection
