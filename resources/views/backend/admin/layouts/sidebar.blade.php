@@ -26,6 +26,10 @@
                     href="{{ route('admin.service.fetchService') }}"><i class="la la-tablet"></i><span class="menu-title"
                         data-i18n="nav.dash.main">Services</span></a>
             </li>
+            <li class="nav-item {{ current_route() == 'admin.service.fetchCompany' ? 'active' : '' }}"><a
+                href="{{ route('admin.service.fetchCompany') }}"><i class="la la-tablet"></i><span class="menu-title"
+                    data-i18n="nav.dash.main">Company</span></a>
+        </li>
 
             <li
                 class="nav-item {{ current_route() == 'admin.category.index' || current_route() == 'admin.parentcategory.index' || current_route() == 'admin.brand.fetfetchs' ? 'open' : '' }}">

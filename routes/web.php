@@ -58,4 +58,8 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
     //Service Routes
     Route::resource('service', ServiceController::class);
     Route::get('/services/list', [ServiceController::class, 'fetchService'])->name('service.fetchService');
+
+    //Company Routes
+    Route::resource('company', CompanyController::class);
+    Route::get('/companies/list', [CompanyController::class, 'fetchCompany'])->name('service.fetchCompany');
 });

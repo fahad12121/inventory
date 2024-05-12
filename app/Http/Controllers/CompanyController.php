@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Branch;
+use App\Models\Company;
 use Illuminate\Http\Request;
 
-class BranchController extends Controller
+class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $branches = Branch::orderBy('id', 'desc')
+        $companies = Company::orderBy('id', 'desc')
             ->get();
 
         return response()->json([
-            "data" => $branches
+            "data" => $companies
         ]);
     }
 
@@ -36,27 +36,27 @@ class BranchController extends Controller
         try {
             $id = $request->id;
             if ($id) {
-                $branch = Branch::find($id);
-                $branch->name = $request->name;
-                $branch->email = $request->email;
-                $branch->phone = $request->phone;
-                $branch->address = $request->address;
-                $branch->save();
-                if ($branch) {
+                $company = Company::find($id);
+                $company->name = $request->name;
+                $company->email = $request->email;
+                $company->phone = $request->phone;
+                $company->address = $request->address;
+                $company->save();
+                if ($company) {
                     // Return a response if needed
-                    return response()->json(['message' => 'Branch Updated successfully'], 200);
+                    return response()->json(['message' => 'Company Updated successfully'], 200);
                 }
             } else {
                 // Store the data in the database
-                $branch = new Branch();
-                $branch->name = $request->name;
-                $branch->email = $request->email;
-                $branch->phone = $request->phone;
-                $branch->address = $request->address;
-                $branch->save();
+                $company = new Company();
+                $company->name = $request->name;
+                $company->email = $request->email;
+                $company->phone = $request->phone;
+                $company->address = $request->address;
+                $company->save();
 
                 // Return a response if needed
-                return response()->json(['message' => 'Branch stored successfully'], 200);
+                return response()->json(['message' => 'Company stored successfully'], 200);
             }
         } catch (\Illuminate\Database\QueryException $ex) {
             // Return an error response
@@ -67,7 +67,7 @@ class BranchController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Branch $branch)
+    public function show(Company $company)
     {
         //
     }
@@ -75,7 +75,7 @@ class BranchController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Branch $branch)
+    public function edit(Company $company)
     {
         //
     }
@@ -83,7 +83,7 @@ class BranchController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Branch $branch)
+    public function update(Request $request, Company $company)
     {
         //
     }
@@ -91,15 +91,15 @@ class BranchController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Branch $branch, Request $request)
+    public function destroy(Company $company, Request $request)
     {
-        $branch = Branch::find($request->id);
+        $branch = Company::find($request->id);
         $branch->delete();
         return response()->json(['status' => 'Record Deleted Successfully']);
     }
 
-    public function fetchbranches(Request $request)
+    public function fetchCompany(Request $request)
     {
-        return view('backend.admin.pages.users.branch.index');
+        return view('backend.admin.pages.company.index');
     }
 }
