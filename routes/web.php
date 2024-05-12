@@ -33,9 +33,14 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
 
     Route::resource('parentcategory', ParentCategoryController::class);
     Route::resource('category', CategoryController::class);
+
     Route::resource('brand', BrandController::class);
     Route::get('/brands', [BrandController::class, 'fetchBrands'])->name('brand.fetfetchs');
+
+    //product routes
     Route::resource('product', ProductController::class);
-    Route::get('/all/products', [ProductController::class, 'fetchProducts'])->name('product.fetchProduct');
+    Route::get('/products/list', [ProductController::class, 'fetchProducts'])->name('product.fetchProduct');
     Route::post('/import/products', [ProductController::class, 'import'])->name('product.import');
+    Route::get('download-example-csv', [ProductController::class, 'download'])->name('product.download');
+
 });

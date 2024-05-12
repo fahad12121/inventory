@@ -6,12 +6,12 @@
                         data-i18n="nav.dash.main">Dashboard</span></a>
             </li>
             <li class="nav-item {{ current_route() == 'admin.product.fetchProduct' ? 'active' : '' }}"><a
-                    href="{{ route('admin.product.fetchProduct') }}"><i class="la la-home"></i><span class="menu-title"
+                    href="{{ route('admin.product.fetchProduct') }}"><i class="la la-list"></i><span class="menu-title"
                         data-i18n="nav.dash.main">Products</span></a>
             </li>
             <li
                 class="nav-item {{ current_route() == 'admin.category.index' || current_route() == 'admin.parentcategory.index' || current_route() == 'admin.brand.fetfetchs' ? 'open' : '' }}">
-                <a href="#"><i class="la la-home"></i><span class="menu-title"
+                <a href="#"><i class="la la-file"></i><span class="menu-title"
                         data-i18n="nav.dash.main">Forms</span></a>
                 <ul class="menu-content">
                     <li class="{{ current_route() == 'admin.parentcategory.index' ? 'active' : '' }}"><a

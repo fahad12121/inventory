@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\{Product, Category, Brand};
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Response;
 class ProductController extends Controller
 {
     /**
@@ -165,5 +165,15 @@ class ProductController extends Controller
         } catch (\Throwable $th) {
             return back()->withError(__('Something is wrong!'));
         }
+    }
+
+    public function download()
+    {
+        $csvData = "category,brand,name,imei number, warranty date, purchase cost, sell cost, alert quantity\nexample,example,example, example, dd/mm/yyyy, example, example, example";
+
+        return Response::make($csvData, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="product_example.csv"',
+        ]);
     }
 }

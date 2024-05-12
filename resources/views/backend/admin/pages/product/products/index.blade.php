@@ -15,12 +15,19 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="row">
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             <h4 class="card-title">Products</h4>
 
                                         </div>
                                         <div class="col-md-2">
-                                            <button type="button" id="addBtn" class="btn btn-outline-info block"
+                                            <a href="{{ route('admin.product.download') }}"
+                                                class="btn btn-outline-info block" download>
+                                                Example CSV
+                                            </a>
+
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="button" id="addBtn" class="btn btn-outline-success block"
                                                 data-toggle="modal" data-target="#csvModal">
                                                 Import CSV
                                             </button>
@@ -120,28 +127,23 @@
                                     <div class="col-md-4 mt-2">
                                         <label for="name" class="form-label">Warranty Date</label> <span
                                             class="text-danger">*</span>
-                                        <input type="date" class="form-control" name="warranty_date" id="warranty_date">
+                                        <input type="date" class="form-control" name="warranty_date"
+                                            id="warranty_date">
                                         <div id="warranty_dateError" class="text-danger"></div>
                                     </div>
                                     <div class="col-md-4 mt-2">
-                                        <label for="name" class="form-label">Purchase Cost</label> <span
-                                            class="text-danger">*</span>
+                                        <label for="name" class="form-label">Purchase Cost</label>
                                         <input type="text" class="form-control" name="purchase_cost"
                                             id="purchase_cost">
-                                        <div id="purchase_costError" class="text-danger"></div>
                                     </div>
                                     <div class="col-md-4 mt-2">
-                                        <label for="name" class="form-label">Sell Cost</label> <span
-                                            class="text-danger">*</span>
+                                        <label for="name" class="form-label">Sell Cost</label>
                                         <input type="text" class="form-control" name="sell_cost" id="sell_cost">
-                                        <div id="sell_costError" class="text-danger"></div>
                                     </div>
                                     <div class="col-md-4 mt-2">
-                                        <label for="name" class="form-label">Alert Quantity</label> <span
-                                            class="text-danger">*</span>
+                                        <label for="name" class="form-label">Alert Quantity</label>
                                         <input type="text" class="form-control" name="alert_quantity"
                                             id="alert_quantity">
-                                        <div id="alert_quantityError" class="text-danger"></div>
                                     </div>
 
                                 </form>
@@ -239,7 +241,7 @@
                         table.ajax.reload();
                         $('#csvModal').modal(
                             'hide'); // Hide the modal after successful submission
-                       
+
                     },
                     error: function(xhr) {
                         // Handle error response
