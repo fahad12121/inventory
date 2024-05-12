@@ -28,6 +28,20 @@
                 </ul>
             </li>
 
+            <li
+            class="nav-item {{ current_route() == 'admin.category.index' ? 'open' : '' }}">
+            <a href="#"><i class="la la-users"></i><span class="menu-title"
+                    data-i18n="nav.dash.main">Users</span></a>
+            <ul class="menu-content">
+                <li class="{{ current_route() == 'admin.branch.fetchbranch' ? 'active' : '' }}"><a
+                        class="menu-item" href="{{ route('admin.branch.fetchbranch') }}"
+                        data-i18n="nav.dash.ecommerce">Branch</a>
+                </li>
+           
+               
+            </ul>
+        </li>
+
         </ul>
     </div>
 </div>

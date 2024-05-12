@@ -12,7 +12,12 @@ class BranchController extends Controller
      */
     public function index()
     {
-        //
+        $branches = Branch::orderBy('id', 'desc')
+            ->get();
+
+        return response()->json([
+            "data" => $branches
+        ]);
     }
 
     /**
@@ -28,7 +33,35 @@ class BranchController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $id = $request->id;
+            if ($id) {
+                $branch = Branch::find($id);
+                $branch->name = $request->name;
+                $branch->email = $request->email;
+                $branch->phone = $request->phone;
+                $branch->address = $request->address;
+                $branch->save();
+                if ($branch) {
+                    // Return a response if needed
+                    return response()->json(['message' => 'Branch Updated successfully'], 200);
+                }
+            } else {
+                // Store the data in the database
+                $branch = new Branch();
+                $branch->name = $request->name;
+                $branch->email = $request->email;
+                $branch->phone = $request->phone;
+                $branch->address = $request->address;
+                $branch->save();
+
+                // Return a response if needed
+                return response()->json(['message' => 'Branch stored successfully'], 200);
+            }
+        } catch (\Illuminate\Database\QueryException $ex) {
+            // Return an error response
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
     }
 
     /**
@@ -61,5 +94,10 @@ class BranchController extends Controller
     public function destroy(Branch $branch)
     {
         //
+    }
+
+    public function fetchbranches(Request $request)
+    {
+        return view('backend.admin.pages.users.branch.index');
     }
 }

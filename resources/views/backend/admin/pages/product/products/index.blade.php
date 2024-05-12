@@ -189,9 +189,8 @@
             </div>
         </div>
     </div>
-
+@endsection
 @section('scripts')
-    <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}" type="text/javascript"></script>
     <script>
         const editMember = (item) => {
             $('#myModalLabel1').text('Edit Product');

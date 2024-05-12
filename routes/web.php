@@ -43,4 +43,7 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
     Route::post('/import/products', [ProductController::class, 'import'])->name('product.import');
     Route::get('download-example-csv', [ProductController::class, 'download'])->name('product.download');
 
+    //Branch Routes
+    Route::resource('branch', BranchController::class);
+    Route::get('/branches/list', [BranchController::class, 'fetchbranches'])->name('branch.fetchbranch');
 });
