@@ -236,6 +236,7 @@
                     success: function(response) {
                         // Handle success response
                         toastr.success(response.message);
+                        table.ajax.reload();
                         $('#csvModal').modal(
                             'hide'); // Hide the modal after successful submission
                        

@@ -117,11 +117,10 @@ class ProductController extends Controller
     //*** POST Request
     public function import(Request $request)
     {
-
         try {
             $filename = '';
             if ($file = $request->file('file')) {
-                $filename = time() . '-' . $file->getClientOriginalExtension();
+                $filename = time() . '-' . $file->getClientOriginalName(); // Changed to getOriginalName()
                 $file->move('products/', $filename);
             }
 
@@ -129,66 +128,41 @@ class ProductController extends Controller
             $i = 1;
 
             while (($line = fgetcsv($file)) !== FALSE) {
-
                 if ($i != 1) {
+                    $category_id = $line[0] ? Category::whereName($line[0])->value('id') : null;
+                    $brand_id = $line[1] ? Brand::whereName($line[1])->value('id') : null;
 
-                    $category_id = $line[0] ? (Category::whereName($line[0])->exists() ? Category::whereName($line[0])->first()->id : 0) : 0;
-                    $brand_id = $line[1] ? (Brand::whereName($line[1])->exists() ? Brand::whereName($line[1])->first()->id : 0) : 0;
-                    dd($brand_id);
-                    exit();
-                    $area = Area::whereIn('name', $names)->get();
-                    $names = [];
-                    foreach ($name as $key => $value) {
-                        if (in_array($value, $area->pluck('name')->toArray())) {
-                            $names[$prices[$key]] = $value;
-                        }
+                    if (!$category_id) {
+                        $category = new Category();
+                        $category->parent_cat_id = null; // Assuming parent_cat_id is nullable
+                        $category->name = $line[0];
+                        $category->save();
+                        $category_id = $category->id;
                     }
-
-                    if (count($names) > 0) {
-                        $i = 0;
-                        foreach ($names as $key => $value) {
-                            $area_id = $area[$i]->id;
-                            AreaPrice::create([
-                                'product_id' => $item_id,
-                                'area_id' => $area_id,
-                                'price' => $key,
-                            ]);
-
-                            $i++;
-                        }
+                    if (!$brand_id) {
+                        $brand = new Brand();
+                        $brand->name = $line[1];
+                        $brand->save();
+                        $brand_id = $brand->id;
                     }
-
-                    $input['category_id'] = $category_id;
-                    $input['brand_id'] = $brand_id;
-                    $input['name'] = $line[2];
-                    $input['imei_number'] = $line[3];
-                    $input['warranty_date'] = $line[4];
-                    $input['purchase_cost'] = $line[5];
-                    $input['sell_cost'] = $line[6];
-                    $input['alert_quantity'] = $line[7];
 
                     $data = new Product();
-                    $data->fill($input)->save();
-
+                    $data->category_id = $category_id;
+                    $data->brand_id = $brand_id;
+                    $data->name = $line[2];
+                    $data->imei_number = $line[3];
+                    $data->warranty_date = $line[4];
+                    $data->purchase_cost = $line[5];
+                    $data->sell_cost = $line[6];
+                    $data->alert_quantity = $line[7];
+                    $data->save();
                 }
-
                 $i++;
             }
             fclose($file);
 
-
-            $removefiles = glob(public_path() . '/assets/temp_files/*');
-
-            // Deleting all the files in the list
-            foreach ($removefiles as $file) {
-                if (is_file($file))
-                    unlink($file);
-            }
-
-
-            return back()->withSuccess(__('Bulk Product File Imported Successfully.'));
+            return response()->json(['message' => 'File Imported Successfully']);
         } catch (\Throwable $th) {
-
             return back()->withError(__('Something is wrong!'));
         }
     }
