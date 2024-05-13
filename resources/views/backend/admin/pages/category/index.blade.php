@@ -33,31 +33,18 @@
                                 <div class="card-content collapse show">
                                     <div class="card-body card-dashboard">
 
-                                        <table class="table table-striped table-bordered zero-configuration">
+                                        <table class="table table-striped table-bordered"
+                                            id="categoryTable">
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Parent Category</th>
                                                     <th>Name</th>
                                                     <th>Actions</th>
-
                                                 </tr>
                                             </thead>
-                                            <tbody id="categoryTableBody">
-                                                @foreach ($categories as $item)
-                                                    <tr>
-                                                        <input type="hidden" class="delete_val"
-                                                            value="{{ $item->id }}">
-                                                        <td>{{ $item->id }}</td>
-                                                        <td>{{ $item->parentCategory ? $item->parentCategory->name : 'N/A' }}
-                                                        </td>
-                                                        <td>{{ $item->name }}</td>
-                                                        <td><a class="" onclick="EditModal({{ $item }})"><i
-                                                                    class="ft-edit text-info"></i> </a> <a class=""
-                                                                id="cancel-button"><i class="ft-trash text-danger"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
+                                            <tbody>
+
                                                 <!-- Table rows will be dynamically added here -->
                                             </tbody>
 
@@ -125,7 +112,7 @@
             </div>
         </div>
     </div>
-
+@endsection
 @section('scripts')
     <script>
         function previewImage(event) {
@@ -137,7 +124,7 @@
             };
             reader.readAsDataURL(input.files[0]);
         }
-        const EditModal = (item) => {
+        const editMember = (item) => {
             $('#myModalLabel1').text('Edit Category');
             $('#id').val(item.id);
             $('#parent_cat_id').val(item.parent_cat_id);
@@ -162,6 +149,39 @@
         }
 
         $(document).ready(function() {
+            // Function to fetch brands data via AJAX and populate DataTable
+            var table = $('#categoryTable').DataTable({
+                ajax: "{{ route('admin.category.index') }}",
+                columns: [{
+                        "data": "id"
+                    },
+                    {
+                        "data": null,
+                        "render": function(data, type, row) {
+                            return `<p>${row.parentCategory && row.parentCategory.name ? row.parentCategory.name : 'N/A'}</p>`;
+                        }
+                    },
+                    {
+                        "data": "name"
+                    },
+                    {
+                        "data": {},
+                        render: function(data, row, type) {
+
+                            return `<a class="edit" data-id="${row.id}" title="Edit"><i class="ft-edit text-info"></i></a> 
+                            <a class="" id="cancel-button" data-id="${row.id}" title="Delete"><i class="ft-trash text-danger"></i></a>`;
+                        }
+                    }
+
+                ]
+            });
+
+            $(document).on('click', '.edit', function() {
+
+                var row = $(this).closest('tr');
+                var data = table.row(row).data(); // Assuming you're using DataTables
+                editMember(data);
+            })
 
             //Submit Form
             // Event handler for form submission
@@ -208,7 +228,7 @@
                         toastr.success(response.message);
                         $('#default').modal(
                             'hide'); // Hide the modal after successful submission
-                        location.reload(); // Reload the window or update the table as needed
+                        table.ajax.reload(); // Reload the window or update the table as needed
                     },
                     error: function(xhr) {
                         // Handle error response
@@ -217,18 +237,16 @@
                 });
             });
 
-
             //Delete Modal Working
+            $(document).on('click', '#cancel-button', function() {
+                var row = $(this).closest('tr');
+                var delete_id = row.find('td:eq(0)').text();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $('#cancel-button').click(function(e) {
-                e.preventDefault();
-                var delete_id = $(this).closest("tr").find('.delete_val').val();
                 swal({
                         title: "Are you sure?",
                         text: "Once deleted, you will not be able to recover this data!",
@@ -256,14 +274,14 @@
                                                 icon: "success",
                                             })
                                             .then((result) => {
-                                                location.reload();
+                                                table.ajax.reload();
                                             });
                                     } else {
                                         swal(response.error, {
                                                 icon: "error",
                                             })
                                             .then((result) => {
-                                                location.reload();
+                                                table.ajax.reload();
                                             });
                                     }
                                 }
@@ -274,8 +292,7 @@
                         }
                     });
 
-
-            });
+            })
         });
     </script>
 @endsection

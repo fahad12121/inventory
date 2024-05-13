@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\{Product, Category, Brand};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+
 class ProductController extends Controller
 {
     /**
@@ -111,7 +112,7 @@ class ProductController extends Controller
     {
         $categories = Category::orderBy('id', 'desc')->get();
         $brands = Brand::orderBy('id', 'desc')->get();
-        return view('backend.admin.pages.product.products.index', compact('brands', 'categories'));
+        return view('backend.admin.pages.product.index', compact('brands', 'categories'));
     }
 
     //*** POST Request
@@ -175,5 +176,13 @@ class ProductController extends Controller
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="product_example.csv"',
         ]);
+    }
+
+    public function listitems(Request $request, $id)
+    {
+        $product = Product::find($id);
+        if ($product) {
+            return view('backend.admin.pages.product.list_items', compact('product'));
+        }
     }
 }

@@ -32,7 +32,7 @@
         </li>
 
             <li
-                class="nav-item {{ current_route() == 'admin.category.index' || current_route() == 'admin.parentcategory.index' || current_route() == 'admin.brand.fetfetchs' ? 'open' : '' }}">
+                class="nav-item {{ current_route() == 'admin.category.fetchCategories' || current_route() == 'admin.parentcategory.index' || current_route() == 'admin.brand.fetfetchs' ? 'open' : '' }}">
                 <a href="#"><i class="la la-file"></i><span class="menu-title"
                         data-i18n="nav.dash.main">Forms</span></a>
                 <ul class="menu-content">
@@ -40,8 +40,8 @@
                             class="menu-item" href="{{ route('admin.parentcategory.index') }}"
                             data-i18n="nav.dash.ecommerce">Parent Category</a>
                     </li>
-                    <li class="{{ current_route() == 'admin.category.index' ? 'active' : '' }}"><a class="menu-item"
-                            href="{{ route('admin.category.index') }}" data-i18n="nav.dash.crypto">Category</a>
+                    <li class="{{ current_route() == 'admin.category.fetchCategories' ? 'active' : '' }}"><a class="menu-item"
+                            href="{{ route('admin.category.fetchCategories') }}" data-i18n="nav.dash.crypto">Category</a>
                     </li>
                     <li class="{{ current_route() == 'admin.brand.fetfetchs' ? 'active' : '' }}"><a class="menu-item"
                             href="{{ route('admin.brand.fetfetchs') }}" data-i18n="nav.dash.crypto">Brands</a>
@@ -50,7 +50,7 @@
                 </ul>
             </li>
 
-            <li class="nav-item {{ current_route() == 'admin.category.index' ? 'open' : '' }}">
+            <li class="nav-item {{ current_route() == 'admin.branch.fetchbranch' ? 'open' : '' }}">
                 <a href="#"><i class="la la-users"></i><span class="menu-title"
                         data-i18n="nav.dash.main">Users</span></a>
                 <ul class="menu-content">

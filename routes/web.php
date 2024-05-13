@@ -33,6 +33,7 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
 
     Route::resource('parentcategory', ParentCategoryController::class);
     Route::resource('category', CategoryController::class);
+    Route::get('/categories/list', [CategoryController::class, 'fetchCategories'])->name('category.fetchCategories');
 
     Route::resource('brand', BrandController::class);
     Route::get('/brands', [BrandController::class, 'fetchBrands'])->name('brand.fetfetchs');
@@ -42,10 +43,11 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
     Route::get('/products/list', [ProductController::class, 'fetchProducts'])->name('product.fetchProduct');
     Route::post('/import/products', [ProductController::class, 'import'])->name('product.import');
     Route::get('download-example-csv', [ProductController::class, 'download'])->name('product.download');
+    Route::get('product/{id}/list-items', [ProductController::class, 'listitems'])->name('product.listitems');
 
     //Branch Routes
     Route::resource('branch', BranchController::class);
-    Route::get('/branches/list', [BranchController::class, 'fetchbranches'])->name('branch.fetchbranch');
+    Route::get('/branch/list', [BranchController::class, 'fetchbranches'])->name('branch.fetchbranch');
 
     //Sender Receiver Routes
     Route::resource('sedrec', SedRecController::class);

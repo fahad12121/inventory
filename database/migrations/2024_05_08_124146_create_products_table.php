@@ -18,7 +18,6 @@ return new class extends Migration
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
             $table->string('name')->nullable();
-            $table->string('imei_number')->nullable();
             $table->string('warranty_date')->nullable();
             $table->string('purchase_cost')->nullable();
             $table->string('sell_cost')->nullable();

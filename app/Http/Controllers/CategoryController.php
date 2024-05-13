@@ -13,13 +13,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $parentCategories = ParentCategory::select('id', 'name')
-            ->orderBy('id', 'desc')
-            ->get();
         $categories = Category::with('parentCategory')->select('id', 'name', 'img', 'parent_cat_id')
             ->orderBy('id', 'desc')
             ->get();
-        return view('backend.admin.pages.product.category.index', compact('parentCategories', 'categories'));
+        return response()->json([
+            "data" => $categories
+        ]);
     }
 
     /**
@@ -105,5 +104,13 @@ class CategoryController extends Controller
         $category = Category::find($request->id);
         $category->delete();
         return response()->json(['status' => 'Record Deleted Successfully']);
+    }
+
+    public function fetchCategories(Request $request)
+    {
+        $parentCategories = ParentCategory::select('id', 'name')
+            ->orderBy('id', 'desc')
+            ->get();
+        return view('backend.admin.pages.category.index', compact('parentCategories'));
     }
 }

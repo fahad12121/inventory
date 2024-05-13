@@ -15,7 +15,7 @@ class ParentCategoryController extends Controller
         $parentCategories = ParentCategory::select('id', 'name')
             ->orderBy('id', 'desc')
             ->get();
-        return view('backend.admin.pages.product.parentcategory.index', compact('parentCategories'));
+        return view('backend.admin.pages.parentcategory.index', compact('parentCategories'));
     }
 
     /**

@@ -93,6 +93,6 @@ class BrandController extends Controller
 
     public function fetchBrands()
     {
-        return view('backend.admin.pages.product.brand.index');
+        return view('backend.admin.pages.brand.index');
     }
 }

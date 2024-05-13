@@ -52,11 +52,7 @@
                                                     <th>Category</th>
                                                     <th>Brand</th>
                                                     <th>Name</th>
-                                                    <th>IMEI Number</th>
                                                     <th>Warranty Date</th>
-                                                    <th>Purchase cost</th>
-                                                    <th>Sell Cost</th>
-                                                    <th>Alert Quantity</th>
                                                     <th>Actions</th>
 
                                                 </tr>
@@ -253,7 +249,6 @@
 
             // Function to fetch brands data via AJAX and populate DataTable
             var table = $('#productTabel').DataTable({
-                scrollX: true,
                 ajax: "{{ route('admin.product.index') }}",
                 columns: [{
                         "data": "id"
@@ -274,25 +269,16 @@
                         "data": "name"
                     },
                     {
-                        "data": "imei_number"
-                    },
-                    {
                         "data": "warranty_date"
-                    },
-                    {
-                        "data": "purchase_cost"
-                    },
-                    {
-                        "data": "sell_cost"
-                    },
-                    {
-                        "data": "alert_quantity"
                     },
                     {
                         "data": {},
                         render: function(data, row, type) {
-                            return `<a class="edit" data-id="${row.id}" ><i class="ft-edit text-info"></i></a> <a
-                             class="" id="cancel-button" data-id="${row.id}"><i class="ft-trash text-danger"></i></a>`;
+                            var routeUrl = "{{ route('admin.product.listitems', ':id') }}";
+                            routeUrl = routeUrl.replace(':id', data.id);
+                            return `<a class="edit" data-id="${row.id}" title="Edit"><i class="ft-edit text-info"></i></a> 
+                            <a class="" id="cancel-button" data-id="${row.id}" title="Delete"><i class="ft-trash text-danger"></i></a>
+                            <a href="${routeUrl}"  class="listItems" id="listItems" data-id="${row.id}" title="List Items"><i class="ft-list text-secondary"></i></a>`;
                         }
                     }
 
