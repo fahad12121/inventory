@@ -6,19 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Product extends Model
+class ProductItem extends Model
 {
     use HasFactory;
 
-    protected $fillable  = ['category_id', 'brand_id', 'name', 'warranty_date', 'purchase_cost', 'sell_cost', 'alert_quantity'];
+    protected $fillable = ['category_id', 'product_id', 'item_no', 'serial_no'];
 
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
-    public function brand(): BelongsTo
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(Brand::class, 'brand_id', 'id');
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 }

@@ -35,7 +35,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <button type="button" id="addBtn" class="btn btn-outline-primary block"
-                                                data-toggle="modal" data-target="#default">
+                                                data-toggle="modal" data-target="#default" onclick="addModal()">
                                                 +Add
                                             </button>
 
@@ -115,16 +115,9 @@
                                         <div id="nameError" class="text-danger"></div>
                                     </div>
                                     <div class="col-md-4 mt-2">
-                                        <label for="name" class="form-label">IMEI Number</label> <span
-                                            class="text-danger">*</span>
-                                        <input type="text" class="form-control" name="imei_number" id="imei_number">
-                                        <div id="imei_numberError" class="text-danger"></div>
-                                    </div>
-                                    <div class="col-md-4 mt-2">
                                         <label for="name" class="form-label">Warranty Date</label> <span
                                             class="text-danger">*</span>
-                                        <input type="date" class="form-control" name="warranty_date"
-                                            id="warranty_date">
+                                        <input type="date" class="form-control" name="warranty_date" id="warranty_date">
                                         <div id="warranty_dateError" class="text-danger"></div>
                                     </div>
                                     <div class="col-md-4 mt-2">
@@ -194,7 +187,6 @@
             $('#brand_id').val(item.brand_id);
             $('#category_id').val(item.category_id);
             $('#name').val(item.name);
-            $('#imei_number').val(item.imei_number);
             $('#warranty_date').val(item.warranty_date);
             $('#purchase_cost').val(item.purchase_cost);
             $('#sell_cost').val(item.sell_cost);
@@ -204,6 +196,20 @@
             $('#default').modal('show');
 
         }
+
+        const addModal = () => {
+            $('#myModalLabel1').text('Add Product');
+            $('#id').val('');
+            $('#category_id').val('');
+            $('#brand_id').val('');
+            $('#name').val('');
+            $('#warranty_date').val('');
+            $('#purchase_cost').val('');
+            $('#sell_cost').val('');
+            $('#alert_quantity').val('');
+
+        }
+
         $(document).ready(function() {
 
             //upload csv
@@ -304,7 +310,6 @@
                 var category_id = $('#category_id').val();
                 var brand_id = $('#brand_id').val();
                 var name = $('#name').val();
-                var imei_number = $('#imei_number').val();
                 var warranty_date = $('#warranty_date').val();
                 var purchase_cost = $('#purchase_cost').val();
                 var sell_cost = $('#sell_cost').val();

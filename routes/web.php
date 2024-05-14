@@ -44,7 +44,12 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
     Route::post('/import/products', [ProductController::class, 'import'])->name('product.import');
     Route::get('download-example-csv', [ProductController::class, 'download'])->name('product.download');
     Route::get('product/{id}/list-items', [ProductController::class, 'listitems'])->name('product.listitems');
+    Route::get('get-product-category/{id}', [ProductController::class, 'getProducts'])->name('product.getProducts');
 
+    //Product Item routes
+    Route::resource('productItem', ProductItemController::class);
+    Route::get('productItem/product/{id}', [ProductItemController::class, 'index'])->name('productItem.index');
+    Route::post('/import/product-items', [ProductItemController::class, 'import'])->name('productItem.import');
     //Branch Routes
     Route::resource('branch', BranchController::class);
     Route::get('/branch/list', [BranchController::class, 'fetchbranches'])->name('branch.fetchbranch');

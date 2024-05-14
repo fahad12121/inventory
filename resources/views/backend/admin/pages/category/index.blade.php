@@ -33,8 +33,7 @@
                                 <div class="card-content collapse show">
                                     <div class="card-body card-dashboard">
 
-                                        <table class="table table-striped table-bordered"
-                                            id="categoryTable">
+                                        <table class="table table-striped table-bordered" id="categoryTable">
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
@@ -69,7 +68,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form class="row g-3">
+                                <form class="row g-3" id="addCategorytForm">
                                     @csrf
                                     <input type="hidden" name="id" id="id">
                                     <div class="col-md-6">
@@ -158,7 +157,7 @@
                     {
                         "data": null,
                         "render": function(data, type, row) {
-                            return `<p>${row.parentCategory && row.parentCategory.name ? row.parentCategory.name : 'N/A'}</p>`;
+                            return `<p>${row.parent_category && row.parent_category.name ? row.parent_category.name : 'N/A'}</p>`;
                         }
                     },
                     {
@@ -216,6 +215,12 @@
                     formData.append('img', img);
 
                 }
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
 
                 $.ajax({
                     url: "{{ route('admin.category.store') }}", // Replace 'your.route.name' with the actual route name

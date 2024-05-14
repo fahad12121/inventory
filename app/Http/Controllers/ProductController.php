@@ -41,7 +41,6 @@ class ProductController extends Controller
                 $product->brand_id = $request->brand_id;
                 $product->category_id = $request->category_id;
                 $product->name = $request->name;
-                $product->imei_number = $request->imei_number;
                 $product->warranty_date = $request->warranty_date;
                 $product->purchase_cost = $request->purchase_cost;
                 $product->sell_cost = $request->sell_cost;
@@ -58,7 +57,6 @@ class ProductController extends Controller
                 $product->brand_id = $request->brand_id;
                 $product->category_id = $request->category_id;
                 $product->name = $request->name;
-                $product->imei_number = $request->imei_number;
                 $product->warranty_date = $request->warranty_date;
                 $product->purchase_cost = $request->purchase_cost;
                 $product->sell_cost = $request->sell_cost;
@@ -184,5 +182,12 @@ class ProductController extends Controller
         if ($product) {
             return view('backend.admin.pages.product.list_items', compact('product'));
         }
+    }
+
+    public function getProducts(Request $request, $id)
+    {
+        $data['products'] = Product::where(['category_id' => $id])->get();
+
+        return response()->json($data);
     }
 }
