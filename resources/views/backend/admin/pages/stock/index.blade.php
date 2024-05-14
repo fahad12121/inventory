@@ -3,6 +3,34 @@
     {{ __('Stock Issue ') }}
 @endsection
 @section('content')
+    <style>
+        #search-results {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 5%;
+            width: 90%;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+            z-index: 1;
+        }
+
+        #search-results>ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #search-results li {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #search-results li:hover {
+            background-color: #f2f2f2;
+        }
+    </style>
     <div class="app-content content">
         <div class="content-wrapper">
             <div class="content-header row">
@@ -33,15 +61,17 @@
                                 <div class="card-content collapse show">
                                     <div class="card-body card-dashboard">
 
-                                        <table class="table table-striped table-bordered" id="senRecTabel">
+                                        <table class="table table-striped table-bordered" id="branchIssueTabel">
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
-                                                    <th>Name</th>
-                                                    <th>Email</th>
-                                                    <th>Phone</th>
-                                                    <th>Address</th>
-                                                    <th>Actions</th>
+                                                    <th>Item No</th>
+                                                    <th>Serial No</th>
+                                                    <th>Branch</th>
+                                                    <th>Sender</th>
+                                                    <th>Receiver</th>
+                                                    <th>Branch Issue</th>
+                                                    <th>Issue Date</th>
 
                                                 </tr>
                                             </thead>
@@ -71,14 +101,14 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form id="addSenRecForm">
+                                <form id="branchissueform">
                                     @csrf
                                     <input type="hidden" name="id" id="id">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label for="date" class="form-label">Date</label> <span
                                                 class="text-danger">*</span>
-                                            <input type="date" class="form-control" name="date" id="date">
+                                            <input type="date" class="form-control" name="created_at" id="created_at">
                                             <div id="dateError" class="text-danger"></div>
                                         </div>
                                         <div class="col-md-4">
@@ -125,13 +155,37 @@
                                             <div class="search-box input-group">
                                                 <button type="button" class="btn btn-secondary btn-lg"><i
                                                         class="la la-barcode"></i></button>
-                                                <input type="text" oninput="searProducts(this.value)" name="product_code_name" id="lims_productcodeSearch"
+                                                <input type="text" oninput="searProducts(this.value)"
+                                                    name="product_code_name" id="lims_productcodeSearch"
                                                     placeholder="Please type product code and select..."
                                                     class="form-control" />
                                             </div>
                                             <div id="search-results">
                                                 <ul id="search-product">
                                                 </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-5">
+                                        <div class="col-md-12">
+                                            <h5>Orders Table <span class="text-danger">*</span></h5>
+                                            <div class="table-responsive mt-3">
+                                                <table id="myTable"
+                                                    class="table table-hover table-striped table-bordered order-list">
+                                                    <thead>
+                                                        <tr>
+                                                            <th><input type="checkbox" class="select-all"
+                                                                    style="cursor: pointer"></th>
+                                                            <th>#</th>
+                                                            <th>{{ 'Serial No / ICCID No' }}</th>
+                                                            <th>{{ 'Imei No / Sim No' }}</th>
+                                                            <th>Created At</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="table-data">
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
@@ -153,8 +207,8 @@
 @section('scripts')
     <script>
         const addModal = () => {
-            $('#myModalLabel1').text('Add Sender/Receiver');
-            $('#date').val('');
+            $('#myModalLabel1').text('Add Branch Issuance');
+            $('#created_at').val('');
             $('#branch_id').val('');
             $('#sender_id').val('');
             $('#receiver_id').val('');
@@ -175,5 +229,169 @@
                 $('#receiver_id').html(filteredOptions);
             });
         });
+
+        // Function to fetch brands data via AJAX and populate DataTable
+        var table = $('#branchIssueTabel').DataTable({
+            ajax: "{{ route('admin.stock.index') }}",
+            "scrollX": true,
+            columns: [{
+                    "data": "id"
+                },
+                {
+                    "data": "item_no"
+                },
+                {
+                    "data": "serial_no"
+                },
+                {
+                    "data": null,
+                    "render": function(data, type, row) {
+                        return `<p>${row.branch && row.branch.name ? row.branch.name : 'N/A'}</p>`;
+                    }
+                },
+                {
+                    "data": null,
+                    "render": function(data, type, row) {
+                        return `<p>${row.sender && row.sender.name ? row.sender.name : 'N/A'}</p>`;
+                    }
+                },
+                {
+                    "data": null,
+                    "render": function(data, type, row) {
+                        return `<p>${row.receiver && row.receiver.name ? row.receiver.name : 'N/A'}</p>`;
+                    }
+                },
+                {
+                    "data": null,
+                    "render": function(data, type, row) {
+                        var badgeClass = row.is_branch_issued ? 'success' : 'warning';
+                        var statusText = row.is_branch_issued ? 'Issued' : 'Not Issued';
+                        return `<span class="badge rounded-pill bg-${badgeClass}">${statusText}</span>`;
+                    }
+                }, 
+                {
+                    "data": "branch_issued_at"
+                },
+
+            ]
+        });
+
+        //Submit Form
+        $('#submitForm').on('click', function() {
+            var btn = $(this); // Cache the button element
+
+            // Disable the button to prevent multiple submissions
+            btn.prop('disabled', true);
+
+            $.ajax({
+                url: "{{ route('admin.stock.store') }}",
+                type: 'POST',
+                data: $('#branchissueform').serialize(),
+                success: function(response) {
+                    // Handle success response
+                    toastr.success(response.message);
+                    // Hide the modal after successful submission
+                    $('#default').modal('hide');
+                    location.reload();
+                },
+                error: function(xhr) {
+                    // Handle error response
+                    console.log(xhr.responseText);
+                },
+                complete: function() {
+                    // Re-enable the button after the AJAX request is complete
+                    btn.prop('disabled', false);
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        // Get all checkboxes with the class "select-all"
+        var checkboxes = document.querySelectorAll('.select-all');
+
+        document.querySelector('thead .select-all').addEventListener('change', function() {
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = event.target.checked;
+            });
+        });
+
+        const searProducts = (val) => {
+            if (val.length > 0) {
+                $.ajax({
+                    type: 'GET',
+                    url: "{{ route('admin.search.product') }}",
+                    data: {
+                        query: val
+                    },
+                    success: (res) => {
+                        console.log();
+                        if (res.count > 0) {
+                            ele('search-results').style.display = "block";
+                            addList(res.data);
+                        } else {
+                            ele('search-results').style.display = "none";
+                        }
+                    }
+                })
+            } else {
+                ele('search-results').style.display = "none";
+            }
+        }
+
+        const addList = (products) => {
+            var html = "";
+            products.forEach((product) => {
+                html += `
+                    <li onclick="getProductItems(${product.id})">${product.name}</li>
+                `;
+            })
+
+            ele('search-product').innerHTML = html;
+        }
+
+        const getProductItems = (id) => {
+            var branch_id = ele('branch_id').value;
+
+            $.ajax({
+                type: 'GET',
+                url: "{{ route('admin.product.items') }}",
+                data: {
+                    branch_id: branch_id,
+                    query: id
+                },
+                success: (res) => {
+                    console.log();
+                    if (res.count > 0) {
+                        addItemsData(res.data);
+                    } else {
+                        ele('table-data').innerHTML = "";
+                    }
+                }
+            })
+            ele('lims_productcodeSearch').value = '';
+            ele('search-results').style.display = "none";
+        }
+
+        const addItemsData = (items) => {
+            var html = "";
+            items.forEach((item, index) => {
+                html += `
+                <tr>
+                    <td><input type="checkbox" class="select-all" value="${item.id}" name="items[]"></td>
+                    <td>${index + 1}</td>
+                    <td>${item.serial_no}</td>
+                    <td>${item.item_no}</td>
+                    <td>${convertDate(item.created_at)}</td>
+                </tr>
+                `;
+            });
+
+            ele('table-data').innerHTML = html;
+            checkboxes = document.querySelectorAll('.select-all');
+        }
+
+        $("ul#issuance").siblings('a').attr('aria-expanded', 'true');
+        $("ul#issuance").addClass("show");
+        $("ul#issuance #warehouse-list-menu").addClass("active");
     </script>
 @endsection

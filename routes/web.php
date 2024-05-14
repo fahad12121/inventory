@@ -50,9 +50,10 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
     Route::resource('productItem', ProductItemController::class);
     Route::get('productItem/product/{id}', [ProductItemController::class, 'index'])->name('productItem.index');
     Route::post('/import/product-items', [ProductItemController::class, 'import'])->name('productItem.import');
+
     //Branch Routes
     Route::resource('branch', BranchController::class);
-    Route::get('/branch/list', [BranchController::class, 'fetchbranches'])->name('branch.fetchbranch');
+    Route::get('/branches/list', [BranchController::class, 'fetchbranches'])->name('branch.fetchbranch');
 
     //Sender Receiver Routes
     Route::resource('sedrec', SedRecController::class);
@@ -61,6 +62,8 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
     //stock issue routes
     Route::resource('stock', StockController::class);
     Route::get('/stock-issue/branch/list', [StockController::class, 'fetchStock'])->name('stock.fetchStock');
+    Route::get('search/products', [StockController::class, 'searchProduct'])->name('search.product');
+    Route::get('products/items/list', [StockController::class, 'getProductItems'])->name('product.items');
 
     //Service Routes
     Route::resource('service', ServiceController::class);

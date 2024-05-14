@@ -190,24 +190,6 @@
 
         }
 
-        function convertDate(item) {
-            // Create a Date object from the UTC date string
-            var utcDate = new Date(item);
-
-            // Get year, month, day, hours, minutes, and seconds
-            var year = utcDate.getUTCFullYear();
-            var month = ('0' + (utcDate.getUTCMonth() + 1)).slice(-2);
-            var day = ('0' + utcDate.getUTCDate()).slice(-2);
-            var hours = ('0' + utcDate.getUTCHours()).slice(-2);
-            var minutes = ('0' + utcDate.getUTCMinutes()).slice(-2);
-            var seconds = ('0' + utcDate.getUTCSeconds()).slice(-2);
-
-            // Construct the formatted date string
-            var formattedDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
-
-            return formattedDateTime;
-        }
-
         $(document).ready(function() {
 
             // Function to fetch brands data via AJAX and populate DataTable

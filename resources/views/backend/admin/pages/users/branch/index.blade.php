@@ -16,7 +16,7 @@
                                 <div class="card-header">
                                     <div class="row">
                                         <div class="col-md-10">
-                                            <h4 class="card-title">Products</h4>
+                                            <h4 class="card-title">Branches</h4>
 
                                         </div>
 
