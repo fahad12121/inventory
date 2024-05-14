@@ -66,6 +66,20 @@
                 </ul>
             </li>
 
+            <li class="nav-item {{ current_route() == 'admin.role.fetchRole' ? 'open' : '' }}">
+                <a href="#"><i class="la la-cog"></i><span class="menu-title"
+                        data-i18n="nav.dash.main">Settings</span></a>
+                <ul class="menu-content">
+                    <li class="{{ current_route() == 'admin.role.fetchRole' ? 'active' : '' }}"><a
+                            class="menu-item" href="{{ route('admin.role.fetchRole') }}"
+                            data-i18n="nav.dash.ecommerce">Role</a>
+                    </li>
+
+                </ul>
+            </li>
+
+
+
         </ul>
     </div>
 </div>

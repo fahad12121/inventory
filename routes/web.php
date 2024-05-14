@@ -72,4 +72,8 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
     //Company Routes
     Route::resource('company', CompanyController::class);
     Route::get('/companies/list', [CompanyController::class, 'fetchCompany'])->name('service.fetchCompany');
+
+    //Role routes
+    Route::resource('role', RoleController::class);
+    Route::get('/roles/list', [RoleController::class, 'fetchRole'])->name('role.fetchRole');
 });
