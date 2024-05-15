@@ -116,8 +116,10 @@
                                     <div class="col-md-4 mt-2">
                                         <label for="is_active" class="form-label">Active</label> <span
                                             class="text-danger">*</span> <br>
-                                            <input class="" type="hidden" name="is_active" value="0"> <!-- Hidden input with value 0 -->
-                                            <input class="" type="checkbox" name="is_active" id="is_active" value="1" checked>
+                                        <input class="" type="hidden" name="is_active" value="0">
+                                        <!-- Hidden input with value 0 -->
+                                        <input class="" type="checkbox" name="is_active" id="is_active"
+                                            value="1" checked>
                                     </div>
                                 </form>
                             </div>
@@ -144,7 +146,12 @@
             $('#address').val(item.address);
             $('#city').val(item.city);
             $('#role_id').val(item.role_id);
-            $('#is_active').val(item.is_active);
+            // Check the checkbox if is_active is 1, otherwise uncheck it
+            if (item.is_active == 1) {
+                $('#is_active').prop('checked', true);
+            } else {
+                $('#is_active').prop('checked', false);
+            }
             // Show modal
             $('#default').modal('show');
 

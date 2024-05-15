@@ -64,6 +64,9 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
     Route::get('/stock-issue/branch/list', [StockController::class, 'fetchStock'])->name('stock.fetchStock');
     Route::get('search/products', [StockController::class, 'searchProduct'])->name('search.product');
     Route::get('products/items/list', [StockController::class, 'getProductItems'])->name('product.items');
+    Route::get('/stock-issue/employee/list', [StockController::class, 'fetchStockEmp'])->name('stock.fetchStockEmp'); 
+    Route::get('/stock-issue/employee/fetch', [StockController::class, 'employeeIsssue'])->name('stock.employeeIsssue');
+
 
     //Service Routes
     Route::resource('service', ServiceController::class);

@@ -9,15 +9,15 @@
                     href="{{ route('admin.product.fetchProduct') }}"><i class="la la-list"></i><span class="menu-title"
                         data-i18n="nav.dash.main">Products</span></a>
             </li>
-            <li class="nav-item {{ current_route() == 'admin.stock.fetchStock' ? 'open' : '' }}">
+            <li class="nav-item {{ current_route() == 'admin.stock.fetchStock' || current_route() == 'admin.stock.fetchStockEmp' ? 'open' : '' }}">
                 <a href="#"><i class="la la-tablet"></i><span class="menu-title" data-i18n="nav.dash.main">Stock
                         Issue</span></a>
                 <ul class="menu-content">
                     <li class="{{ current_route() == 'admin.stock.fetchStock' ? 'active' : '' }}"><a class="menu-item"
                             href="{{ route('admin.stock.fetchStock') }}" data-i18n="nav.dash.ecommerce">Branch</a>
                     </li>
-                    <li class="{{ current_route() == 'admin.category.index' ? 'active' : '' }}"><a class="menu-item"
-                            href="{{ route('admin.category.index') }}" data-i18n="nav.dash.crypto">Employee</a>
+                    <li class="{{ current_route() == 'admin.stock.fetchStockEmp' ? 'active' : '' }}"><a class="menu-item"
+                            href="{{ route('admin.stock.fetchStockEmp') }}" data-i18n="nav.dash.crypto">Employee</a>
                     </li>
 
                 </ul>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Stock, SedRec, Branch, Product, ProductItem};
+use App\Models\{Stock, SedRec, Branch, Product, ProductItem, User};
 use Illuminate\Http\Request;
 
 class StockController extends Controller
@@ -12,7 +12,18 @@ class StockController extends Controller
      */
     public function index()
     {
-        $productItems = ProductItem::with('branch', 'sender', 'receiver')->whereNotNull('branch_id')
+        $productItems = ProductItem::with('branch', 'sender', 'receiver')->where(['is_branch_issued' => 1])
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return response()->json([
+            "data" => $productItems
+        ]);
+    }
+
+    public function employeeIsssue()
+    {
+        $productItems = ProductItem::with('branch', 'employee')->where(['is_employee_issued' => 1])
             ->orderBy('id', 'desc')
             ->get();
 
@@ -102,6 +113,18 @@ class StockController extends Controller
         $branches = Branch::orderBy('id', 'desc')->get();
 
         return view('backend.admin.pages.stock.index', compact('sedRec', 'branches'));
+    }
+
+    public function fetchStockEmp(Request $request)
+    {
+        $users = User::where([
+            ['role_id', '=', 4],
+            ['is_active', '=', 1],
+        ])->orderByDesc('id')->get();
+
+        $branches = Branch::orderBy('id', 'desc')->get();
+
+        return view('backend.admin.pages.stock.employee_issuance', compact('users', 'branches'));
     }
 
     public function searchProduct(Request $request)

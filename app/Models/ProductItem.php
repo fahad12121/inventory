@@ -10,7 +10,7 @@ class ProductItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['category_id', 'product_id', 'item_no', 'serial_no', 'sender_id', 'receiver_id', 'branch_id', 'is_branch_issued', 'branch_issued_at'];
+    protected $fillable = ['category_id', 'product_id', 'item_no', 'serial_no', 'sender_id', 'receiver_id', 'branch_id', 'is_branch_issued', 'branch_issued_at', 'employee_id', 'is_employee_issued', 'employee_issued_at'];
 
     public function category(): BelongsTo
     {
@@ -35,5 +35,10 @@ class ProductItem extends Model
     public function receiver(): BelongsTo
     {
         return $this->belongsTo(SedRec::class, 'receiver_id', 'id');
+    }
+
+    public function employee(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'employee_id', 'id');
     }
 }
