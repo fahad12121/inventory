@@ -100,6 +100,6 @@ class SedRecController extends Controller
 
     public function fetchSendRec(Request $request)
     {
-        return view('backend.admin.pages.users.senderreceiver.index');
+        return view('backend.admin.pages.senderreceiver.index');
     }
 }

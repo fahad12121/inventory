@@ -100,6 +100,6 @@ class BranchController extends Controller
 
     public function fetchbranches(Request $request)
     {
-        return view('backend.admin.pages.users.branch.index');
+        return view('backend.admin.pages.branch.index');
     }
 }

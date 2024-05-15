@@ -21,15 +21,15 @@
                     </li>
 
                 </ul>
-            </li> 
+            </li>
             <li class="nav-item {{ current_route() == 'admin.service.fetchService' ? 'active' : '' }}"><a
-                    href="{{ route('admin.service.fetchService') }}"><i class="la la-tablet"></i><span class="menu-title"
-                        data-i18n="nav.dash.main">Services</span></a>
+                    href="{{ route('admin.service.fetchService') }}"><i class="la la-tablet"></i><span
+                        class="menu-title" data-i18n="nav.dash.main">Services</span></a>
             </li>
             <li class="nav-item {{ current_route() == 'admin.service.fetchCompany' ? 'active' : '' }}"><a
-                href="{{ route('admin.service.fetchCompany') }}"><i class="la la-tablet"></i><span class="menu-title"
-                    data-i18n="nav.dash.main">Company</span></a>
-        </li>
+                    href="{{ route('admin.service.fetchCompany') }}"><i class="la la-tablet"></i><span
+                        class="menu-title" data-i18n="nav.dash.main">Company</span></a>
+            </li>
 
             <li
                 class="nav-item {{ current_route() == 'admin.category.fetchCategories' || current_route() == 'admin.parentcategory.index' || current_route() == 'admin.brand.fetfetchs' ? 'open' : '' }}">
@@ -40,8 +40,9 @@
                             class="menu-item" href="{{ route('admin.parentcategory.index') }}"
                             data-i18n="nav.dash.ecommerce">Parent Category</a>
                     </li>
-                    <li class="{{ current_route() == 'admin.category.fetchCategories' ? 'active' : '' }}"><a class="menu-item"
-                            href="{{ route('admin.category.fetchCategories') }}" data-i18n="nav.dash.crypto">Category</a>
+                    <li class="{{ current_route() == 'admin.category.fetchCategories' ? 'active' : '' }}"><a
+                            class="menu-item" href="{{ route('admin.category.fetchCategories') }}"
+                            data-i18n="nav.dash.crypto">Category</a>
                     </li>
                     <li class="{{ current_route() == 'admin.brand.fetfetchs' ? 'active' : '' }}"><a class="menu-item"
                             href="{{ route('admin.brand.fetfetchs') }}" data-i18n="nav.dash.crypto">Brands</a>
@@ -63,6 +64,10 @@
                             class="menu-item" href="{{ route('admin.sedrec.fetchSendRec') }}"
                             data-i18n="nav.dash.ecommerce">Sender/Receiver</a>
                     </li>
+
+                    <li class="{{ current_route() == 'admin.user.fetchUser' ? 'active' : '' }}"><a class="menu-item"
+                            href="{{ route('admin.user.fetchUser') }}" data-i18n="nav.dash.ecommerce">Users</a>
+                    </li>
                 </ul>
             </li>
 
@@ -70,9 +75,8 @@
                 <a href="#"><i class="la la-cog"></i><span class="menu-title"
                         data-i18n="nav.dash.main">Settings</span></a>
                 <ul class="menu-content">
-                    <li class="{{ current_route() == 'admin.role.fetchRole' ? 'active' : '' }}"><a
-                            class="menu-item" href="{{ route('admin.role.fetchRole') }}"
-                            data-i18n="nav.dash.ecommerce">Role</a>
+                    <li class="{{ current_route() == 'admin.role.fetchRole' ? 'active' : '' }}"><a class="menu-item"
+                            href="{{ route('admin.role.fetchRole') }}" data-i18n="nav.dash.ecommerce">Role</a>
                     </li>
 
                 </ul>
