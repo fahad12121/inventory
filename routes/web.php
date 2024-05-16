@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Removal;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -83,4 +84,8 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
     //User Routes
     Route::resource('user', UserController::class);
     Route::get('/users/list', [UserController::class, 'fetchUser'])->name('user.fetchUser');
+
+     //Removal Routes
+     Route::resource('removal', RemovalController::class);
+     Route::get('/removals/list', [RemovalController::class, 'fetchRemoval'])->name('removal.fetchRemoval');
 });

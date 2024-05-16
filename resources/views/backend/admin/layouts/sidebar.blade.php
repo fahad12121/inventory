@@ -22,6 +22,16 @@
 
                 </ul>
             </li>
+            <li class="nav-item {{ current_route() == 'admin.removal.fetchRemoval' ? 'open' : '' }}">
+                <a href="#"><i class="la la-tablet"></i><span class="menu-title" data-i18n="nav.dash.main">Removals</span></a>
+                <ul class="menu-content">
+                    <li class="{{ current_route() == 'admin.removal.fetchRemoval' ? 'active' : '' }}"><a class="menu-item"
+                            href="{{ route('admin.removal.fetchRemoval') }}" data-i18n="nav.dash.ecommerce">Removal</a>
+                    </li>
+                  
+
+                </ul>
+            </li>
             <li class="nav-item {{ current_route() == 'admin.service.fetchService' ? 'active' : '' }}"><a
                     href="{{ route('admin.service.fetchService') }}"><i class="la la-tablet"></i><span
                         class="menu-title" data-i18n="nav.dash.main">Services</span></a>
