@@ -65,7 +65,7 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
     Route::get('/stock-issue/branch/list', [StockController::class, 'fetchStock'])->name('stock.fetchStock');
     Route::get('search/products', [StockController::class, 'searchProduct'])->name('search.product');
     Route::get('products/items/list', [StockController::class, 'getProductItems'])->name('product.items');
-    Route::get('/stock-issue/employee/list', [StockController::class, 'fetchStockEmp'])->name('stock.fetchStockEmp'); 
+    Route::get('/stock-issue/employee/list', [StockController::class, 'fetchStockEmp'])->name('stock.fetchStockEmp');
     Route::get('/stock-issue/employee/fetch', [StockController::class, 'employeeIsssue'])->name('stock.employeeIsssue');
 
 
@@ -85,7 +85,14 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
     Route::resource('user', UserController::class);
     Route::get('/users/list', [UserController::class, 'fetchUser'])->name('user.fetchUser');
 
-     //Removal Routes
-     Route::resource('removal', RemovalController::class);
-     Route::get('/removals/list', [RemovalController::class, 'fetchRemoval'])->name('removal.fetchRemoval');
+    //Removal Routes
+    Route::resource('removal', RemovalController::class);
+    Route::get('/removals/list', [RemovalController::class, 'fetchRemoval'])->name('removal.fetchRemoval');
+
+    //Removal Routes
+    Route::resource('order', OrderController::class);
+    Route::get('/orders/list', [OrderController::class, 'fetchOrder'])->name('order.fetchOrder');
+    Route::post('orders/assign', [OrderController::class, 'assign_order'])->name('order.assign');
+    Route::post('orders/change/status', [OrderController::class, 'change_status'])->name('order.status.change');
+    Route::post('orders/change/tech_status', [OrderController::class, 'tech_change_status'])->name('order.tech_change_status');
 });

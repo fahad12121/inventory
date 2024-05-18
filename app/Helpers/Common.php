@@ -7,3 +7,4 @@ if (!function_exists('current_route')) {
         return \Request::route()->getName();
     }
 }
+
