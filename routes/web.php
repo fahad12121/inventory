@@ -95,4 +95,5 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
     Route::post('orders/assign', [OrderController::class, 'assign_order'])->name('order.assign');
     Route::post('orders/change/status', [OrderController::class, 'change_status'])->name('order.status.change');
     Route::post('orders/change/tech_status', [OrderController::class, 'tech_change_status'])->name('order.tech_change_status');
+    Route::post('orders/upload/deliveryimages', [OrderController::class, 'deliveryImg'])->name('order.deliveryImg');
 });

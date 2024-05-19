@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Order, Service, User, OrderStatus, TechnicianStatus};
+use App\Models\{Order, Service, User, OrderStatus, TechnicianStatus, OrderDeliveryImg};
 use Illuminate\Http\Request;
 use Auth;
 
@@ -70,7 +70,10 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        if ($order) {
+            $order =  Order::with('customer', 'service', 'statuses', 'employee', 'Techstatuses', 'DeliveryImages')->where('id', $order->id)->first();
+            return view('backend.admin.pages.order.show', compact('order'));
+        }
     }
 
     /**
@@ -161,7 +164,7 @@ class OrderController extends Controller
     }
 
     public function tech_change_status(Request $request)
-    { 
+    {
         $orderStatus = new TechnicianStatus();
         $orderStatus->order_id = $request->orderId;
         $orderStatus->technician_id = $request->tech_id;
@@ -169,6 +172,27 @@ class OrderController extends Controller
         $orderStatus->save();
 
         return response()->json(['message' => 'Techniciam Status Changed Successfully', 'code' => 200]);
+    }
 
+    public function deliveryImg(Request $request)
+    {
+        // Handle the uploaded images
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                // Store the image in the storage or database
+                // For simplicity, let's assume you are storing the image in the database
+                $image = new OrderDeliveryImg();
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
+                $file->move('orders/deliveryImg', $filename);
+                $image->order_id = $request->order_id;
+                $image->technician_id = $request->technician_id;
+                $image->file = $filename;
+                $image->save();
+            }
+        }
+
+        // Return a response
+        return response()->json(['message' => 'Images uploaded successfully']);
     }
 }

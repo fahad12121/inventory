@@ -3,6 +3,48 @@
     {{ __('Roles') }}
 @endsection
 @section('content')
+    <style>
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .image-preview-item {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: auto;
+        }
+
+        .image-preview-item .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 2px 5px;
+        }
+
+        .image-container {
+            width: 100%;
+            height: 150px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
     <div class="app-content content">
         <div class="content-wrapper">
             <div class="content-header row">
@@ -36,7 +78,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Customer</th>
-                                                    <th>No of Vehicles</th>
+                                                    <th>Vehicles</th>
                                                     <th>Location</th>
                                                     <th>Date & Time</th>
                                                     <th>Service</th>
@@ -140,6 +182,43 @@
                     </div>
                 </div>
 
+                <!-- Delivery Note Modal -->
+                <div class="modal fade text-left" id="deliveryModal" tabindex="-1" role="dialog"
+                    aria-labelledby="myModalLabel1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModalLabel1">Upload Delivery Note</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="row g-3" id="addDeliveryForm">
+                                    @csrf
+                                   <input type="hidden" name="order_id" id="order_id" value="">
+                                   <input type="hidden" name="technician_id" id="technician_id" value="">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Upload Images</label>
+                                            <div class="image-preview" id="image-preview"></div>
+                                            <input type="file" name="files[]" id="files" class="form-control"
+                                                accept="image/*" multiple onchange="previewImages(event)">
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="button" id="submitFormDeliveryForm"
+                                    class="btn btn-outline-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -155,6 +234,12 @@
             $('#file').val('');
             $('#order_type').val('');
             $('#note').val('');
+        }
+        const showDeliveryNoteModal = (data) => {
+            console.log(data);
+            $('#order_id').val(data.id);
+            $('#technician_id').val(data.technician_id);
+            $('#deliveryModal').modal('show');
         }
 
         var role_id = "{{ Auth::user()->role_id }}";
@@ -216,11 +301,36 @@
                     date.getDate() === today.getDate();
             }
 
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+
+                // Options for date formatting
+                const dateOptions = {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                };
+
+                // Options for time formatting
+                const timeOptions = {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                };
+
+                const formattedDate = date.toLocaleDateString('en-GB', dateOptions);
+                const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+
+                return `${formattedDate}, ${formattedTime}`;
+            }
+
             // // Function to fetch brands data via AJAX and populate DataTable
             var table = $('#OrderTabel').DataTable({
                 ajax: "{{ route('admin.order.index') }}",
                 "scrollX": true,
-                "order": [[0, 'desc']],
+                "order": [
+                    [0, 'desc']
+                ],
                 "rowCallback": function(row, data, index) {
                     let backgroundColor = '';
                     let textColor = 'black';
@@ -263,7 +373,7 @@
                     {
                         "data": null,
                         render: function(data, row, type) {
-                            return `<p>${convertDate(data.date)}</p>`;
+                            return `<p>${formatDate(data.date)}</p>`;
                         }
                     },
                     {
@@ -371,7 +481,8 @@
                                 let status = 'Pending';
 
                                 if (data.techstatuses && data.techstatuses.length > 0) {
-                                    const latestStatus = data.techstatuses[data.techstatuses.length - 1];
+                                    const latestStatus = data.techstatuses[data.techstatuses
+                                        .length - 1];
                                     status = getTechStatusName(latestStatus
                                         .status_id); // Use the JavaScript function
                                     switch (latestStatus.status_id) {
@@ -400,8 +511,12 @@
                     },
                     {
                         "data": {},
-                        render: function(data, row, type) {
+                        render: function(data, type, row) {
+                            var routeUrl = "{{ route('admin.order.show', ':id') }}";
+                            routeUrl = routeUrl.replace(':id', data.id);
                             let textColor = 'black';
+                            let backgroundColor = ''; // default background color
+
                             if (isToday(data.created_at)) {
                                 backgroundColor = '#DC3545'; // Red background for today's orders
                                 textColor = 'white';
@@ -411,13 +526,25 @@
                                 backgroundColor = colors.backgroundColor;
                                 textColor = colors.textColor;
                             }
-                            return `<a class="info" data-id="${row.id}" ><i class="ft-eye text-${textColor}"></i></a>`;
+
+                            let addNoteImagesLink = '';
+                            if (role_id == 4) { // Check if the role_id is 4
+                                addNoteImagesLink =
+                                    `<a class="addNoteImages" data-id="${row.id}" title="Add Delivery Note"><i class="ft-plus text-${textColor}"></i></a>`;
+                            }
+
+                            return `
+                                    <a href="${routeUrl}" class="info" data-id="${row.id}">
+                                        <i class="ft-eye text-${textColor}"></i>
+                                    </a>
+                                    ${addNoteImagesLink}
+                                `;
                         }
                     },
 
                 ],
                 columnDefs: [{
-                    "targets": [4, 7, 8, 9], // Target the fourth column (index 3)
+                    "targets": [7, 8, 9], // Target the fourth column (index 3)
                     "width": "160px", // Set width to 150 pixels
                 }]
             });
@@ -443,6 +570,13 @@
                 var data = table.row(row).data(); // Assuming you're using DataTables
                 var selectedOption = $(this).val(); // Get the selected option value);
                 changeTechStatus(data.id, selectedOption, data.technician_id);
+            })
+            $(document).on('click', '.addNoteImages', function() {
+
+                var row = $(this).closest('tr');
+                var data = table.row(row).data(); // Assuming you're using DataTables
+                showDeliveryNoteModal(data);
+
             })
 
             const assignOrder = (orderId, technicianId) => {
@@ -590,7 +724,7 @@
                     case 4:
                         return 'Close';
                     default:
-                        return 'Unknown';
+                        return 'Pending';
                 }
             }
 
@@ -609,6 +743,130 @@
                 }
             }
 
+        });
+    </script>
+    <script>
+        function previewImages(event) {
+            const input = event.target;
+            const preview = document.getElementById('image-preview');
+            preview.innerHTML = '';
+
+            if (input.files && input.files.length > 0) {
+                swal({
+                    title: 'Please wait while your request is being processed',
+                    allowOutsideClick: false,
+                    onBeforeOpen: () => {
+                        swal.showLoading();
+                    }
+                });
+
+                let images = [];
+                const totalFiles = input.files.length;
+
+                Array.from(input.files).forEach((file, index) => {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        const col = document.createElement('div');
+                        col.classList.add('col-md-3', 'image-preview-item');
+                        col.setAttribute('data-id', index);
+                        col.innerHTML = `
+                                        <div class="image-container">
+                                            <img src="${e.target.result}" alt="Image Preview">
+                                        </div>
+                                        <button class="rmImg btn btn-outline-danger block mt-3" data-id="${index}">&times;</button>
+                                        `;
+                        images.push(col);
+
+                        if (images.length === totalFiles) {
+                            setTimeout(() => {
+                                swal.close();
+                                images.forEach(img => preview.appendChild(img));
+                                addRemoveEventListeners();
+                            }, 2000); // Close Swal after 2 seconds and then show images
+                        }
+                    };
+
+                    reader.readAsDataURL(file);
+                });
+            }
+        }
+
+        function addRemoveEventListeners() {
+            const removeButtons = document.querySelectorAll('.rmImg');
+            removeButtons.forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent the default behavior
+                    const id = event.target.getAttribute('data-id');
+                    removeImage(id);
+                });
+            });
+        }
+
+        function removeImage(id) {
+            const preview = document.getElementById('image-preview');
+            const filesInput = document.getElementById('files');
+            const dt = new DataTransfer();
+
+            Array.from(filesInput.files)
+                .filter((file, i) => i != id)
+                .forEach(file => {
+                    dt.items.add(file);
+                });
+
+            filesInput.files = dt.files;
+            preview.innerHTML = '';
+            previewImages({
+                target: filesInput
+            });
+        }
+        //Submit Data Modal
+        $('#submitFormDeliveryForm').on('click', function() {
+            var btn = $(this); // Cache the button element
+
+            // Disable the button to prevent multiple submissions
+            btn.prop('disabled', true);
+
+            const filesInput = document.getElementById('files');
+            const formData = new FormData();
+            formData.append('_token', '{{ csrf_token() }}');
+            for (const file of filesInput.files) {
+                formData.append('files[]', file);
+            }
+
+            formData.append('order_id', $('#order_id').val());
+            formData.append('technician_id', $('#technician_id').val());
+
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: "{{ route('admin.order.deliveryImg') }}",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // Handle success response
+                    toastr.success(response.message);
+                    table.ajax.reload();
+
+                    // Hide the modal after successful submission
+                    $('#deliveryModal').modal('hide');
+                },
+                error: function(xhr) {
+                    // Handle error response
+                    console.log(xhr.responseText);
+                },
+                complete: function() {
+                    // Re-enable the button after the AJAX request is complete
+                    btn.prop('disabled', false);
+                }
+            });
         });
     </script>
 @endsection

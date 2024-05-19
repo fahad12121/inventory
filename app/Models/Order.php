@@ -35,6 +35,11 @@ class Order extends Model
         return $this->hasMany(TechnicianStatus::class, 'order_id', 'id');
     }
 
+    public function DeliveryImages()
+    {
+        return $this->hasMany(OrderDeliveryImg::class, 'order_id', 'id');
+    }
+
     public function uploadImg($img)
     {
         $file = $img;
