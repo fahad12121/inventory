@@ -90,7 +90,7 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
     Route::get('/removals/list', [RemovalController::class, 'fetchRemoval'])->name('removal.fetchRemoval');
 
     //Removal Routes
-    Route::resource('order', OrderController::class);
+    Route::resource('orderList', OrderController::class);
     Route::get('/orders/list', [OrderController::class, 'fetchOrder'])->name('order.fetchOrder');
     Route::post('orders/assign', [OrderController::class, 'assign_order'])->name('order.assign');
     Route::post('orders/change/status', [OrderController::class, 'change_status'])->name('order.status.change');

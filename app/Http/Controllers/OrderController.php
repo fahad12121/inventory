@@ -15,11 +15,11 @@ class OrderController extends Controller
     {
         $role_id =  Auth::user()->role_id;
         if ($role_id == 2) {
-            $orders = Order::with('customer', 'service', 'statuses', 'employee', 'Techstatuses')->orderBy('id', 'desc')->get();
+            $orders = Order::with('customer', 'statuses', 'employee', 'Techstatuses')->orderBy('id', 'desc')->get();
         } elseif ($role_id == 3) {
-            $orders = Order::with('customer', 'service', 'statuses', 'employee', 'Techstatuses')->where('customer_id', Auth::id())->orderBy('id', 'desc')->get();
+            $orders = Order::with('customer', 'statuses', 'employee', 'Techstatuses')->where('customer_id', Auth::id())->orderBy('id', 'desc')->get();
         } elseif ($role_id == 4) {
-            $orders = Order::with('customer', 'service', 'statuses', 'employee', 'Techstatuses')->where('technician_id', Auth::id())->orderBy('id', 'desc')->get();
+            $orders = Order::with('customer', 'statuses', 'employee', 'Techstatuses')->where('technician_id', Auth::id())->orderBy('id', 'desc')->get();
         }
 
         return response()->json([
@@ -68,8 +68,9 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
+    public function show(Order $order, $id)
     {
+        $order = Order::find($id);
         if ($order) {
             $order =  Order::with('customer', 'service', 'statuses', 'employee', 'Techstatuses', 'DeliveryImages')->where('id', $order->id)->first();
             return view('backend.admin.pages.order.show', compact('order'));

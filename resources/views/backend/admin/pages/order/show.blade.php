@@ -195,106 +195,29 @@
                                         <h4 class="card-title">Order Tracking</h4>
                                         <div class="stepper mt-2">
                                             @php
-                                                if (count($order->statuses) > 0) {
-                                                    $start =
-                                                        count($order->statuses->where('status_id', 1)) > 0
-                                                            ? $order->statuses->where('status_id', 1)->last()
-                                                            : null;
-                                                    $preparing =
-                                                        count($order->statuses->where('status_id', 2)) > 0
-                                                            ? $order->statuses->where('status_id', 2)->last()
-                                                            : null;
-                                                    $delivery =
-                                                        count($order->statuses->where('status_id', 3)) > 0
-                                                            ? $order->statuses->where('status_id', 3)->last()
-                                                            : null;
-                                                    $installation =
-                                                        count($order->statuses->where('status_id', 4)) > 0
-                                                            ? $order->statuses->where('status_id', 4)->last()
-                                                            : null;
-                                                    $integration =
-                                                        count($order->statuses->where('status_id', 5)) > 0
-                                                            ? $order->statuses->where('status_id', 5)->last()
-                                                            : null;
-                                                    $close =
-                                                        count($order->statuses->where('status_id', 6)) > 0
-                                                            ? $order->statuses->where('status_id', 6)->last()
-                                                            : null;
-                                                } else {
-                                                    $start = null;
-                                                    $preparing = null;
-                                                    $delivery = null;
-                                                    $installation = null;
-                                                    $integration = null;
-                                                    $close = null;
-                                                }
+                                                $statuses = [
+                                                    'start' => $order->statuses->where('status_id', 1)->last() ?? null,
+                                                    'preparing' => $order->statuses->where('status_id', 2)->last() ?? null,
+                                                    'delivery' => $order->statuses->where('status_id', 3)->last() ?? null,
+                                                    'installation' => $order->statuses->where('status_id', 4)->last() ?? null,
+                                                    'integration' => $order->statuses->where('status_id', 5)->last() ?? null,
+                                                    'close' => $order->statuses->where('status_id', 6)->last() ?? null,
+                                                ];
                                             @endphp
-                                            <div class="step {{ $start != null ? 'active' : '' }}">
-                                                <b>Start</b>
-                                                <div></div>
-                                                <span>
-                                                    @if ($start != null)
-                                                        <date class="active-status">
-                                                            {{ date('Y-m-d, D, h:i A', strtotime($start->updated_at)) }}
-                                                        </date>
-                                                    @endif
-                                                </span>
-                                            </div>
-                                            <div class="step {{ $preparing != null ? 'completed' : '' }}">
-                                                <b>Preparing</b>
-                                                <div></div>
-                                                <span>
-                                                    @if ($preparing != null)
-                                                        <date class="active-status">
-                                                            {{ date('Y-m-d, D, h:i A', strtotime($preparing->updated_at)) }}
-                                                        </date>
-                                                    @endif
-                                                </span>
-                                            </div>
-                                            <div class="step {{ $delivery != null ? 'completed' : '' }}">
-                                                <b>Delivery</b>
-                                                <div></div>
-                                                <span>
-                                                    @if ($delivery != null)
-                                                        <date class="active-status">
-                                                            {{ date('Y-m-d, D, h:i A', strtotime($delivery->updated_at)) }}
-                                                        </date>
-                                                    @endif
-                                                </span>
-                                            </div>
-                                            <div class="step {{ $installation != null ? 'completed' : '' }}">
-                                                <b>Installation</b>
-                                                <div></div>
-                                                <span>
-                                                    @if ($installation != null)
-                                                        <date class="active-status">
-                                                            {{ date('Y-m-d, D, h:i A', strtotime($installation->updated_at)) }}
-                                                        </date>
-                                                    @endif
-                                                </span>
-                                            </div>
-                                            <div class="step {{ $integration != null ? 'completed' : '' }}">
-                                                <b>Integration</b>
-                                                <div></div>
-                                                <span>
-                                                    @if ($integration != null)
-                                                        <date class="active-status">
-                                                            {{ date('Y-m-d, D, h:i A', strtotime($integration->updated_at)) }}
-                                                        </date>
-                                                    @endif
-                                                </span>
-                                            </div>
-                                            <div class="step {{ $close != null ? 'completed' : '' }}">
-                                                <b>Close</b>
-                                                <div></div>
-                                                <span>
-                                                    @if ($close != null)
-                                                        <date class="active-status">
-                                                            {{ date('Y-m-d, D, h:i A', strtotime($close->updated_at)) }}
-                                                        </date>
-                                                    @endif
-                                                </span>
-                                            </div>
+                                        
+                                            @foreach ($statuses as $status => $record)
+                                                <div class="step {{ $record != null ? ($status == 'start' ? 'active' : 'completed') : '' }}">
+                                                    <b>{{ ucfirst($status) }}</b>
+                                                    <div></div>
+                                                    <span>
+                                                        @if ($record != null)
+                                                            <date class="active-status" data-updated-at="{{ strtotime($record->updated_at) }}">
+                                                                {{ date('Y-m-d, D, h:i A', strtotime($record->updated_at)) }}
+                                                            </date>
+                                                        @endif
+                                                    </span>
+                                                </div>
+                                            @endforeach
                                         </div>
                                         <br>
                                         <h4 class="card-title">Delivery Notes</h4>
@@ -302,7 +225,7 @@
                                             <br>
                                             @if ($order->DeliveryImages && count($order->DeliveryImages) > 0)
                                                 @foreach ($order->DeliveryImages as $item)
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-3 mt-2">
                                                         <a href="{{ asset('orders/deliveryImg/' . $item->file) }}"
                                                             target="_blank">
                                                             <img src="{{ asset('orders/deliveryImg/' . $item->file) }}"
@@ -356,3 +279,27 @@
         </div>
     </div>
 @endsection
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const dateElements = document.querySelectorAll('.active-status');
+
+        dateElements.forEach(dateElement => {
+            const updatedAtTimestamp = parseInt(dateElement.getAttribute('data-updated-at')) * 1000;
+            const updatedAtDate = new Date(updatedAtTimestamp);
+
+            // Format the date to Y-m-d, D, h:i A
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                weekday: 'short',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            };
+
+            // Update the text content of the date element with local time
+            dateElement.textContent = updatedAtDate.toLocaleDateString('en-US', options);
+        });
+    });
+</script>

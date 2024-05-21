@@ -1,6 +1,6 @@
 @extends('backend.admin.layouts.master')
 @section('title')
-    {{ __('Roles') }}
+    {{ __('Orders') }}
 @endsection
 @section('content')
     <style>
@@ -79,9 +79,6 @@
                                                     <th>ID</th>
                                                     <th>Customer</th>
                                                     <th>Vehicles</th>
-                                                    <th>Location</th>
-                                                    <th>Date & Time</th>
-                                                    <th>Service</th>
                                                     <th>Order Type</th>
                                                     <th>Staus</th>
                                                     <th>Assign</th>
@@ -196,8 +193,8 @@
                             <div class="modal-body">
                                 <form class="row g-3" id="addDeliveryForm">
                                     @csrf
-                                   <input type="hidden" name="order_id" id="order_id" value="">
-                                   <input type="hidden" name="technician_id" id="technician_id" value="">
+                                    <input type="hidden" name="order_id" id="order_id" value="">
+                                    <input type="hidden" name="technician_id" id="technician_id" value="">
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Upload Images</label>
@@ -236,7 +233,6 @@
             $('#note').val('');
         }
         const showDeliveryNoteModal = (data) => {
-            console.log(data);
             $('#order_id').val(data.id);
             $('#technician_id').val(data.technician_id);
             $('#deliveryModal').modal('show');
@@ -246,7 +242,7 @@
 
         //tech
         var employees = {!! json_encode($users) !!};
-
+        var table;
 
         $(document).ready(function() {
 
@@ -255,7 +251,7 @@
 
                 // Replace with your actual condition
                 var showColumn = role_id == 4 ? false : true;
-                api.columns([8]).visible(showColumn);
+                api.columns([5]).visible(showColumn);
 
             });
 
@@ -263,27 +259,28 @@
             function getStatusColors(status_id) {
                 switch (status_id) {
                     case 1: // Start
-                        backgroundColor = '#c2f4fc';
-                        textColor = 'black';
+                        return {
+                            backgroundColor: '#a0f98b', textColor: 'black'
+                        };
                     case 2: // Preparing Order
                         return {
-                            backgroundColor: '#c2f4fc', textColor: 'black'
+                            backgroundColor: '#9ba0f0', textColor: 'black'
                         };
                     case 3: // Out for Delivery
                         return {
-                            backgroundColor: '#DAA06D', textColor: 'white'
+                            backgroundColor: '#ffb788', textColor: 'black'
                         };
                     case 4: // Installation and Testing
                         return {
-                            backgroundColor: '#EFF827', textColor: 'black'
+                            backgroundColor: '#9fa1ad', textColor: 'black'
                         };
                     case 5: // Under Integration
                         return {
-                            backgroundColor: '#FFA500', textColor: 'white'
+                            backgroundColor: '#6dc0f6', textColor: 'black'
                         };
                     case 6: // Close
                         return {
-                            backgroundColor: '#29EF00', textColor: 'black'
+                            backgroundColor: '#ff8898', textColor: 'black'
                         };
                     default:
                         return {
@@ -301,32 +298,9 @@
                     date.getDate() === today.getDate();
             }
 
-            function formatDate(dateString) {
-                const date = new Date(dateString);
-
-                // Options for date formatting
-                const dateOptions = {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                };
-
-                // Options for time formatting
-                const timeOptions = {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: true
-                };
-
-                const formattedDate = date.toLocaleDateString('en-GB', dateOptions);
-                const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
-
-                return `${formattedDate}, ${formattedTime}`;
-            }
-
             // // Function to fetch brands data via AJAX and populate DataTable
-            var table = $('#OrderTabel').DataTable({
-                ajax: "{{ route('admin.order.index') }}",
+            table = $('#OrderTabel').DataTable({
+                ajax: "{{ route('admin.orderList.index') }}",
                 "scrollX": true,
                 "order": [
                     [0, 'desc']
@@ -356,7 +330,14 @@
                     });
                 },
                 columns: [{
-                        "data": "id"
+                        "data": null,
+                        "render": function(data, type, row) {
+                            var routeUrl = "{{ route('admin.orderList.show', ':id') }}";
+                            routeUrl = routeUrl.replace(':id', data.id);
+                            return `<a href="${routeUrl}" class="info" data-id="${row.id}" >
+                                        ${row.id}
+                                    </a>`;
+                        }
                     },
                     {
                         "data": null,
@@ -367,21 +348,7 @@
                     {
                         "data": "vehicles"
                     },
-                    {
-                        "data": "location"
-                    },
-                    {
-                        "data": null,
-                        render: function(data, row, type) {
-                            return `<p>${formatDate(data.date)}</p>`;
-                        }
-                    },
-                    {
-                        "data": null,
-                        "render": function(data, type, row) {
-                            return `<p>${row.service && row.service.name ? row.service.name : 'N/A'}</p>`;
-                        }
-                    },
+
                     {
                         "data": "order_type"
                     },
@@ -408,18 +375,25 @@
                                     const latestStatus = data.statuses[data.statuses.length - 1];
                                     status = getStatusName(latestStatus
                                         .status_id); // Use the JavaScript function
+
                                     switch (latestStatus.status_id) {
                                         case 1:
-                                            color = 'secondary';
+                                            color = 'success';
                                             break;
                                         case 2:
-                                            color = 'info';
-                                            break;
-                                        case 3:
                                             color = 'primary';
                                             break;
+                                        case 3:
+                                            color = 'warning';
+                                            break;
                                         case 4:
-                                            color = 'success';
+                                            color = 'secondary';
+                                            break;
+                                        case 5:
+                                            color = 'info';
+                                            break;
+                                        case 6:
+                                            color = 'danger';
                                             break;
                                             // Add more cases if there are more status IDs
                                         default:
@@ -512,7 +486,7 @@
                     {
                         "data": {},
                         render: function(data, type, row) {
-                            var routeUrl = "{{ route('admin.order.show', ':id') }}";
+                            var routeUrl = "{{ route('admin.orderList.show', ':id') }}";
                             routeUrl = routeUrl.replace(':id', data.id);
                             let textColor = 'black';
                             let backgroundColor = ''; // default background color
@@ -544,7 +518,7 @@
 
                 ],
                 columnDefs: [{
-                    "targets": [7, 8, 9], // Target the fourth column (index 3)
+                    "targets": [4, 5, 6], // Target the fourth column (index 3)
                     "width": "160px", // Set width to 150 pixels
                 }]
             });
@@ -618,7 +592,6 @@
                         status: statusId
                     },
                     success: function(response) {
-                        console.log(response);
                         // Handle the success response
                         if (response.code == 404) {
                             toastr.error(response.message);
@@ -688,7 +661,7 @@
                 });
 
                 $.ajax({
-                    url: "{{ route('admin.order.store') }}",
+                    url: "{{ route('admin.orderList.store') }}",
                     type: 'POST',
                     data: formData,
                     processData: false,
@@ -718,10 +691,14 @@
                     case 1:
                         return 'Start';
                     case 2:
-                        return 'In Process';
+                        return 'Preparing';
                     case 3:
-                        return 'In Checking';
+                        return 'Delivery';
                     case 4:
+                        return 'Installation';
+                    case 5:
+                        return 'Integration';
+                    case 6:
                         return 'Close';
                     default:
                         return 'Pending';
@@ -744,8 +721,10 @@
             }
 
         });
-    </script>
-    <script>
+
+
+        //upload images
+
         function previewImages(event) {
             const input = event.target;
             const preview = document.getElementById('image-preview');
