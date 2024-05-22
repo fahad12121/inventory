@@ -20,6 +20,9 @@ class OrderController extends Controller
             $orders = Order::with('customer', 'statuses', 'employee', 'Techstatuses')->where('customer_id', Auth::id())->orderBy('id', 'desc')->get();
         } elseif ($role_id == 4) {
             $orders = Order::with('customer', 'statuses', 'employee', 'Techstatuses')->where('technician_id', Auth::id())->orderBy('id', 'desc')->get();
+        } elseif ($role_id == 6) {
+            $customerIds = Auth::user()->customers->pluck('id');
+            $orders = Order::with('customer', 'statuses', 'employee', 'Techstatuses')->whereIn('customer_id', $customerIds)->orderBy('id', 'desc')->get();
         }
 
         return response()->json([

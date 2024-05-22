@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -25,7 +26,8 @@ class User extends Authenticatable
         'city',
         'role_id',
         'password',
-        'is_active'
+        'is_active',
+        'user_id'
     ];
 
     /**
@@ -58,5 +60,17 @@ class User extends Authenticatable
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class, 'role_id', 'id');
+    }
+
+    // Define relationship where a sales user has many customers
+    public function customers(): HasMany
+    {
+        return $this->hasMany(User::class, 'user_id');
+    }
+
+    // Define relationship where a customer belongs to a sales user
+    public function salesUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -84,6 +84,9 @@ Route::middleware(['auth.admin'])->name('admin.')->group(function () {
     //User Routes
     Route::resource('user', UserController::class);
     Route::get('/users/list', [UserController::class, 'fetchUser'])->name('user.fetchUser');
+    Route::get('/customers/list', [CustomerController::class, 'fetchCustomer'])->name('user.fetchCustomer');
+    Route::get('/customers', [CustomerController::class, 'index'])->name('customer.index');
+    Route::post('/customer/post', [CustomerController::class, 'store'])->name('customer.store');
 
     //Removal Routes
     Route::resource('removal', RemovalController::class);

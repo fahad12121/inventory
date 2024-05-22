@@ -90,7 +90,12 @@
                     </ul>
                 </li>
             @endif
-
+            @if (Auth::user()->role_id === 2 || Auth::user()->role_id === 6)
+                <li class="nav-item {{ current_route() == 'admin.user.fetchCustomer' ? 'active' : '' }}"><a
+                        href="{{ route('admin.user.fetchCustomer') }}"><i class="la la-users"></i><span
+                            class="menu-title" data-i18n="nav.dash.main">Customers</span></a>
+                </li>
+            @endif
 
             <li class="nav-item {{ current_route() == 'admin.order.fetchOrder' ? 'active' : '' }}"><a
                     href="{{ route('admin.order.fetchOrder') }}"><i class="la la-road"></i><span class="menu-title"
