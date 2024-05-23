@@ -98,7 +98,7 @@
             @endif
 
             <li class="nav-item {{ current_route() == 'admin.order.fetchOrder' ? 'active' : '' }}"><a
-                    href="{{ route('admin.order.fetchOrder') }}"><i class="la la-road"></i><span class="menu-title"
+                    href="{{ route('admin.order.fetchOrder') }}"><i class="la la-shopping-cart"></i><span class="menu-title"
                         data-i18n="nav.dash.main">Orders</span></a>
             </li>
 
