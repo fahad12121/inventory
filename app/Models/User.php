@@ -73,4 +73,15 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function uploadImg($img)
+    {
+        $file = $img;
+        $extension = $file->getClientOriginalExtension();
+        $filename = time() . '.' . $extension;
+        $file->move('users/', $filename);
+        $image = $filename;
+
+        return $image;
+    }
 }

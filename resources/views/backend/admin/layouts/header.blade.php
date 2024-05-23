@@ -215,14 +215,14 @@
                                   <span class="user-name text-bold-700">{{ Auth::user()->name }}</span>
                               </span>
                               <span class="avatar avatar-online">
-                                  <img src="../../../app-assets/images/portrait/small/avatar-s-19.png"
+                                  <img src="{{ Auth::user()->profile_img ? asset('users/' . Auth::user()->profile_img) : asset('app-assets/images/portrait/small/avatar-s-8.png') }}"
                                       alt="avatar"><i></i></span>
                           </a>
-                          <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#"><i
-                                      class="ft-user"></i> Edit Profile</a>
+                          <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item"
+                                  href="{{ route('admin.user.edit', Auth::user()->id) }}"><i class="ft-user"></i> Edit
+                                  Profile</a>
                               <div class="dropdown-divider"></div>
-                                <a class="dropdown-item"
-                                  href="{{ route('logout') }}"
+                              <a class="dropdown-item" href="{{ route('logout') }}"
                                   onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">
                                   <form id="logout-form" action="{{ route('logout') }}" method="POST"

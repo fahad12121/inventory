@@ -46,8 +46,18 @@ class UserController extends Controller
                 $user->phone = $request->phone;
                 $user->address = $request->address;
                 $user->city = $request->city;
-                $user->role_id = $request->role_id;
+                if ($request->role_id) {
+                    $user->role_id = $request->role_id;
+                }
                 $user->is_active = $request->is_active;
+                // Handle cover image upload
+                if ($request->hasFile('cover_img')) {
+                    $user->cover_img = $user->uploadImg($request->file('cover_img'));
+                }
+                // Handle  profile image upload
+                if ($request->hasFile('profile_img')) {
+                    $user->profile_img = $user->uploadImg($request->file('profile_img'));
+                }
                 $user->save();
                 if ($user) {
                     // Return a response if needed
@@ -89,7 +99,10 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::find($id);
+        if ($user) {
+            return view('backend.admin.pages.users.edit', compact('user'));
+        }
     }
 
     /**
@@ -115,7 +128,4 @@ class UserController extends Controller
         $roles = Role::all();
         return view('backend.admin.pages.users.index', compact('roles'));
     }
-    
-
-
 }
