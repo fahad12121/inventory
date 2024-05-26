@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductItem;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ProductItemController extends Controller
@@ -10,13 +11,20 @@ class ProductItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($id)
+    public function index(Request $request, $id)
     {
-        $productItems = ProductItem::with('product', 'category')->where(['product_id' => $id])->orderBy('id', 'desc')
-            ->get();
+        $query = ProductItem::where('product_id', $id);
+
+        if ($request->has('startDate') && $request->has('endDate')) {
+            $startDate = Carbon::createFromFormat('m/d/Y', $request->startDate)->startOfDay();
+            $endDate = Carbon::createFromFormat('m/d/Y', $request->endDate)->endOfDay();
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        }
+
+        $productItems = $query->with(['category', 'product'])->get();
 
         return response()->json([
-            "data" => $productItems
+            'data' => $productItems
         ]);
     }
 

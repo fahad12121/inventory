@@ -3,6 +3,8 @@
     {{ __('Employee Issue ') }}
 @endsection
 @section('content')
+<!-- Latest compiled and minified CSS -->
+
     <style>
         #search-results {
             display: none;
@@ -113,8 +115,7 @@
                                         <div class="col-md-4">
                                             <label for="branch_id" class="form-label">Select Branch</label> <span
                                                 class="text-danger">*</span>
-                                            <select name="branch_id" id="branch_id" class="select2 form-control">
-                                                <option value="" selected disabled>--Select--</option>
+                                            <select name="branch_id" id="branch_id" title="--Select--" class="selectpicker" data-live-search="true">
                                                 @foreach ($branches as $item)
                                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                 @endforeach
@@ -124,9 +125,18 @@
                                         <div class="col-md-4">
                                             <label for="employee_id" class="form-label">Select Employee</label> <span
                                                 class="text-danger">*</span>
-                                            <select name="employee_id" id="employee_id" class="select2 form-control">
-                                                <option value="" selected disabled>--Select--</option>
+                                            <select name="employee_id" id="employee_id" title="--Select--" class="selectpicker" data-live-search="true">
                                                 @foreach ($users as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <div id="senderError" class="text-danger"></div>
+                                        </div>
+                                        <div class="col-md-4 mt-2">
+                                            <label for="customer_id" class="form-label">Select Customer</label> <span
+                                                class="text-danger">*</span>
+                                            <select name="customer_id" id="customer_id" title="--Select--" class="selectpicker" data-live-search="true" >
+                                                @foreach ($customers as $item)
                                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                 @endforeach
                                             </select>
@@ -190,6 +200,7 @@
     </div>
 @endsection
 @section('scripts')
+
     <script>
         const addModal = () => {
             $('#myModalLabel1').text('Add Employee Issuance');

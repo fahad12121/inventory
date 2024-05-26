@@ -4,6 +4,7 @@
 @endsection
 
 @section('content')
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <div class="app-content content">
         <div class="content-wrapper">
             <div class="content-header row">
@@ -16,31 +17,62 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <h4 class="card-title">({{ $product->name ? $product->name : 'N/A' }}) Items
                                                 List
                                             </h4>
 
                                         </div>
-                                        <div class="col-md-2">
-                                            <a href="{{ route('admin.product.download') }}"
-                                                class="btn btn-outline-info block" download>
-                                                Example CSV
-                                            </a>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Select Date Range</label>
+                                                <div class='input-group'>
+                                                    <input type='text' name="datefilter" id="datefilter" class="form-control" />
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <span class="la la-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
 
                                         </div>
-                                        <div class="col-md-2">
-                                            <button type="button" id="addBtn" class="btn btn-outline-success block"
-                                                data-toggle="modal" data-target="#csvModal">
-                                                Import CSV
-                                            </button>
+                                        <div class="col-md-2" style="margin-top: 28px;">
+                                            <div class="form-group">
+
+                                                <a  id="searchBtn" class="btn btn-outline-primary block" download>
+                                                    Search
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2" style="margin-top: 28px;">
+                                            <div class="form-group">
+                                                <a href="{{ route('admin.product.download') }}"
+                                                    class="btn btn-outline-info block" download>
+                                                    Exp CSV
+                                                </a>
+                                            </div>
 
                                         </div>
-                                        <div class="col-md-2">
-                                            <button type="button" id="addBtn" class="btn btn-outline-primary block"
-                                                data-toggle="modal" data-target="#default" onclick="addModal()">
-                                                +Add
-                                            </button>
+                                        <div class="col-md-2" style="margin-top: 28px;">
+                                            <div class="form-group">
+                                                <button type="button" id="addBtn" class="btn btn-outline-success block"
+                                                    data-toggle="modal" data-target="#csvModal">
+                                                    Import CSV
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-2" style="margin-top: 28px;">
+                                            <div class="form-group">
+                                                <button type="button" id="addBtn" class="btn btn-outline-primary block"
+                                                    data-toggle="modal" data-target="#default" onclick="addModal()">
+                                                    +Add
+                                                </button>
+                                            </div>
 
                                         </div>
                                     </div>
@@ -166,7 +198,29 @@
     </div>
 @endsection
 @section('scripts')
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script>
+        $(function() {
+
+            $('input[name="datefilter"]').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    cancelLabel: 'Clear'
+                }
+            });
+
+            $('input[name="datefilter"]').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format(
+                    'MM/DD/YYYY'));
+            });
+
+            $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+
+        });
+
         const editMember = (item) => {
             $('#myModalLabel1').text('Edit Product Item');
             $('#id').val(item.id);
@@ -194,7 +248,17 @@
 
             // Function to fetch brands data via AJAX and populate DataTable
             var table = $('#productItemTabel').DataTable({
-                ajax: "{{ route('admin.productItem.index', $product->id) }}",
+                ajax: {
+                    url: "{{ route('admin.productItem.index', $product->id) }}",
+                    data: function(d) {
+                        var dateRange = $('#datefilter').val();
+                        if (dateRange) {
+                            var dates = dateRange.split(' - ');
+                            d.startDate = dates[0];
+                            d.endDate = dates[1];
+                        }
+                    }
+                },
                 columns: [{
                         "data": "id"
                     },
@@ -231,6 +295,10 @@
                     }
 
                 ]
+            });
+            // Event handler for search button
+            $('#searchBtn').on('click', function() {
+                table.ajax.reload();
             });
 
             $(document).on('click', '.edit', function() {

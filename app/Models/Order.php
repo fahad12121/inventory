@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
@@ -38,6 +39,12 @@ class Order extends Model
     public function DeliveryImages()
     {
         return $this->hasMany(OrderDeliveryImg::class, 'order_id', 'id');
+    }
+
+    // Assuming there is a latestStatus relation that fetches the latest status
+    public function latestStatus(): HasOne
+    {
+        return $this->hasOne(OrderStatus::class)->latestOfMany();
     }
 
     public function uploadImg($img)

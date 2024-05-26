@@ -52,8 +52,10 @@ class StockController extends Controller
             if (isset($data['employee_id'])) {
                 $data = [
                     'employee_id' => $data['employee_id'],
+                    'customer_id' => $data['customer_id'],
                     'branch_id' => $data['branch_id'],
                     'is_employee_issued' => 1,
+                    'is_customer_issued' => 1,
                     'employee_issued_at' => date('y-m-d h:i:s', strtotime($data['created_at'])),
                 ];
             } else {
@@ -121,10 +123,14 @@ class StockController extends Controller
             ['role_id', '=', 4],
             ['is_active', '=', 1],
         ])->orderByDesc('id')->get();
+        $customers = User::where([
+            ['role_id', '=', 3],
+            ['is_active', '=', 1],
+        ])->orderByDesc('id')->get();
 
         $branches = Branch::orderBy('id', 'desc')->get();
 
-        return view('backend.admin.pages.stock.employee_issuance', compact('users', 'branches'));
+        return view('backend.admin.pages.stock.employee_issuance', compact('users', 'branches', 'customers'));
     }
 
     public function searchProduct(Request $request)
