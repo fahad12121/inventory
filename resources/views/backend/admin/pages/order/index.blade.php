@@ -60,7 +60,7 @@
                                         <div class="col-md-10">
                                             <h4 class="card-title">Orders</h4>
                                         </div>
-                                        @if (Auth::user()->role_id === 3)
+                                        @if (Auth::user()->role ? Auth::user()->role->name : '' === 'User')
                                             <div class="col-md-2">
                                                 <button type="button" id="addBtn" class="btn btn-outline-primary block"
                                                     data-toggle="modal" data-target="#default" onclick="addModal()">
@@ -156,9 +156,9 @@
                                             <label>Order Type</label> <span class="text-danger">*</span>
                                             <select name="order_type" id="order_type" class="form-control">
                                                 <option value="" selected disabled>--Select OrderType--</option>
-                                                <option value="Normal">Normal</option>
-                                                <option value="Urgent">Urgent</option>
-                                                <option value="Very Urgent">Very Urgent</option>
+                                                <option value="Installation">Installation</option>
+                                                <option value="Removal">Removal</option>
+                                                <option value="Redo">Redo</option>
                                             </select>
                                         </div>
                                     </div>
@@ -238,7 +238,7 @@
             $('#deliveryModal').modal('show');
         }
 
-        var role_id = "{{ Auth::user()->role_id }}";
+        var role_name = "{{ Auth::user()->role ? Auth::user()->role->name : '' }}";
 
         //tech
         var employees = {!! json_encode($users) !!};
@@ -250,7 +250,7 @@
                 var api = new $.fn.dataTable.Api(settings);
 
                 // Replace with your actual condition
-                var showColumn = role_id == 4 ? false : true;
+                var showColumn = role_name === 'Employee' ? false : true;
                 api.columns([5]).visible(showColumn);
 
             });
@@ -355,18 +355,22 @@
                     {
                         "data": null,
                         render: function(data, row, type) {
-                            if (role_id == 2) {
+                            let latestStatusId = data.statuses && data.statuses.length > 0 ? data
+                                .statuses[data.statuses.length - 1].status_id : null;
+                            let isDisabled = latestStatusId == 6 ? 'disabled' : '';
+
+                            if (role_name === 'Admin' || role_name === 'Operations') {
                                 return `<div class="form-group">
-                                        <select required name="status_id" class="form-control changeStatus">
-                                            <option value="" selected disabled >--Select--</option>
-                                            <option value="1" ${data.statuses && data.statuses.length > 0 && data.statuses[data.statuses.length - 1].status_id == 1 ? 'selected' : ''}>Start</option>
-                                            <option value="2" ${data.statuses && data.statuses.length > 0 && data.statuses[data.statuses.length - 1].status_id == 2 ? 'selected' : ''}>Preparing Order</option>
-                                            <option value="3" ${data.statuses && data.statuses.length > 0 && data.statuses[data.statuses.length - 1].status_id == 3 ? 'selected' : ''}>Out for Delivery</option>
-                                            <option value="4" ${data.statuses && data.statuses.length > 0 && data.statuses[data.statuses.length - 1].status_id == 4 ? 'selected' : ''}>Installation and Testing</option>
-                                            <option value="5" ${data.statuses && data.statuses.length > 0 && data.statuses[data.statuses.length - 1].status_id == 5 ? 'selected' : ''}>Under Integration</option>
-                                            <option value="6" ${data.statuses && data.statuses.length > 0 && data.statuses[data.statuses.length - 1].status_id == 6 ? 'selected' : ''} readonly>Close</option>
-                                        </select>
-                                    </div>`;
+                                            <select required name="status_id" class="form-control changeStatus" ${isDisabled}>
+                                                <option value="" selected disabled>--Select--</option>
+                                                <option value="1" ${latestStatusId == 1 ? 'selected' : ''}>Start</option>
+                                                <option value="2" ${latestStatusId == 2 ? 'selected' : ''}>Preparing Order</option>
+                                                <option value="3" ${latestStatusId == 3 ? 'selected' : ''}>Out for Delivery</option>
+                                                <option value="4" ${latestStatusId == 4 ? 'selected' : ''}>Installation and Testing</option>
+                                                <option value="5" ${latestStatusId == 5 ? 'selected' : ''}>Under Integration</option>
+                                                <option value="6" ${latestStatusId == 6 ? 'selected' : ''}>Close</option>
+                                            </select>
+                                        </div>`;
                             } else {
                                 let color = 'warning';
                                 let status = 'Pending';
@@ -409,7 +413,7 @@
                     {
                         "data": null,
                         render: function(data, row, type) {
-                            if (role_id == 2) {
+                            if (role_name === 'Admin' || role_name === 'Operations') {
                                 var selectOptions =
                                     '<option value="" selected disabled>--Select--</option>'; // Adding the "Please Select" option
                                 // Loop through the employees array and create options
@@ -440,7 +444,7 @@
                     {
                         "data": null,
                         render: function(data, row, type) {
-                            if (role_id == 4) {
+                            if (role_name === 'Employee') {
                                 return `<div class="form-group">
                                         <select required name="status_id" class="form-control changeTechStatus">
                                             <option value="" selected disabled >--Select--</option>
@@ -502,7 +506,7 @@
                             }
 
                             let addNoteImagesLink = '';
-                            if (role_id == 4) { // Check if the role_id is 4
+                            if (role_name === 'Employee') { // Check if the role_id is 4
                                 addNoteImagesLink =
                                     `<a class="addNoteImages" data-id="${row.id}" title="Add Delivery Note"><i class="ft-plus text-${textColor}"></i></a>`;
                             }

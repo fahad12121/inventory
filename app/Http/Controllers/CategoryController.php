@@ -58,8 +58,8 @@ class CategoryController extends Controller
                 // Handle image upload
                 if ($request->hasFile('img')) {
                     $category->img = $category->uploadImg($request->file('img'));
-                    $category->save();
                 }
+                $category->save();
 
                 // Return a response if needed
                 return response()->json(['message' => 'Category stored successfully'], 200);

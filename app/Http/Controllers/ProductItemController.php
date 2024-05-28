@@ -62,6 +62,9 @@ class ProductItemController extends Controller
                 $productItem->product_id = $request->product_id;
                 $productItem->item_no = $request->item_no;
                 $productItem->serial_no = $request->serial_no;
+                $productItem->stock_no = $request->stock_no;
+                $productItem->server = $request->server;
+                $productItem->date = $request->date;
                 $productItem->save();
 
                 // Return a response if needed
@@ -142,6 +145,9 @@ class ProductItemController extends Controller
                     $data->product_id = $product_id;
                     $data->item_no = $line[2];
                     $data->serial_no = $line[3];
+                    $data->stock_no = $line[4];
+                    $data->server = $line[5];
+                    $data->date = $line[6];
                     $data->save();
                 }
                 $i++;

@@ -29,7 +29,8 @@
                                             <div class="form-group">
                                                 <label>Select Date Range</label>
                                                 <div class='input-group'>
-                                                    <input type='text' name="datefilter" id="datefilter" class="form-control" />
+                                                    <input type='text' name="datefilter" id="datefilter"
+                                                        class="form-control" />
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">
                                                             <span class="la la-calendar"></span>
@@ -43,7 +44,7 @@
                                         <div class="col-md-2" style="margin-top: 28px;">
                                             <div class="form-group">
 
-                                                <a  id="searchBtn" class="btn btn-outline-primary block" download>
+                                                <a id="searchBtn" class="btn btn-outline-primary block" download>
                                                     Search
                                                 </a>
                                             </div>
@@ -127,15 +128,13 @@
                                     <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <label for="category_id" class="form-label">Category</label> <span
-                                                class="text-danger">*</span>
+                                            <label for="category_id" class="form-label">Category</label> 
                                             <input type="text"
                                                 value="{{ $product->category ? $product->category->name : 'N/A' }}" readonly
                                                 class="form-control">
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="product_id" class="form-label">Product</label> <span
-                                                class="text-danger">*</span>
+                                            <label for="product_id" class="form-label">Product</label>
                                             <input type="text" value="{{ $product->name ? $product->name : 'N/A' }}"
                                                 readonly class="form-control">
                                         </div>
@@ -143,14 +142,33 @@
 
                                     <div class="row">
                                         <div class="col-md-6 mt-2">
-                                            <label for="item_no" class="form-label">Item No</label> <span
+                                            <label for="item_no" class="form-label">Imei No</label> <span
                                                 class="text-danger">*</span>
                                             <input type="text" class="form-control" name="item_no" id="item_no">
                                         </div>
                                         <div class="col-md-6 mt-2">
-                                            <label for="serial_no" class="form-label">Serial No</label> <span
+                                            <label for="serial_no" class="form-label">Sim No</label> <span
                                                 class="text-danger">*</span>
                                             <input type="text" class="form-control" name="serial_no" id="serial_no">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mt-2">
+                                            <label for="stock_no" class="form-label">Stock No</label> <span
+                                                class="text-danger">*</span>
+                                            <input type="text" class="form-control" name="stock_no" id="stock_no">
+                                        </div>
+                                        <div class="col-md-6 mt-2">
+                                            <label for="server" class="form-label">Server</label> <span
+                                                class="text-danger">*</span>
+                                            <input type="text" class="form-control" name="server" id="server">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mt-2">
+                                            <label for="date" class="form-label">Date</label> <span
+                                                class="text-danger">*</span>
+                                            <input type="text" class="form-control" name="date" id="date">
                                         </div>
                                     </div>
                                 </form>
@@ -298,7 +316,12 @@
             });
             // Event handler for search button
             $('#searchBtn').on('click', function() {
-                table.ajax.reload();
+                var dateRange = $('#datefilter').val();
+                if (!dateRange) {
+                    toastr.error('Please select a date range first.');
+                } else {
+                    table.ajax.reload();
+                }
             });
 
             $(document).on('click', '.edit', function() {

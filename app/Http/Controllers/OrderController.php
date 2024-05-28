@@ -13,14 +13,14 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $role_id =  Auth::user()->role_id;
-        if ($role_id == 2) {
+        $role_name =  Auth::user()->role ? Auth::user()->role->name : '';
+        if ($role_name == 'Admin') {
             $orders = Order::with('customer', 'statuses', 'employee', 'Techstatuses')->orderBy('id', 'desc')->get();
-        } elseif ($role_id == 3) {
+        } elseif ($role_name == 'User') {
             $orders = Order::with('customer', 'statuses', 'employee', 'Techstatuses')->where('customer_id', Auth::id())->orderBy('id', 'desc')->get();
-        } elseif ($role_id == 4) {
+        } elseif ($role_name == 'Employee') {
             $orders = Order::with('customer', 'statuses', 'employee', 'Techstatuses')->where('technician_id', Auth::id())->orderBy('id', 'desc')->get();
-        } elseif ($role_id == 6) {
+        } elseif ($role_name == 'Sales') {
             $customerIds = Auth::user()->customers->pluck('id');
             $orders = Order::with('customer', 'statuses', 'employee', 'Techstatuses')->whereIn('customer_id', $customerIds)->orderBy('id', 'desc')->get();
         }
