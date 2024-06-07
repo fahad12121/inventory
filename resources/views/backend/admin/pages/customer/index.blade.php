@@ -15,7 +15,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="row">
-                                        <div class="col-md-10">
+                                        <div class="col-md-8">
                                             <h4 class="card-title">Customers</h4>
 
                                         </div>
@@ -24,6 +24,12 @@
                                             <button type="button" id="addBtn" class="btn btn-outline-primary block"
                                                 data-toggle="modal" data-target="#default" onclick="addModal()">
                                                 +Add
+                                            </button>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="button" id="addBtn" class="btn btn-outline-primary block"
+                                                data-toggle="modal" data-target="#csvModal">
+                                                Imp Csv
                                             </button>
                                         </div>
                                     </div>
@@ -118,6 +124,36 @@
                     </div>
                 </div>
 
+                <!-- CSV -->
+                <div class="modal fade text-left" id="csvModal" tabindex="-1" role="dialog"
+                    aria-labelledby="myModalLabel1" aria-hidden="true">
+                    <div class="modal-dialog modal-sm" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModalLabel1">Add Product</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="row g-3" id="addcsvForm">
+                                    @csrf
+                                    <div class="col-md-12">
+                                        <label for="file" class="form-label">Import CSV</label> <span
+                                            class="text-danger">*</span>
+                                        <input type="file" class="form-control" name="file" id="file"
+                                            accept=".csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="button" id="submitCsv" class="btn btn-outline-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -158,7 +194,7 @@
 
             // // Function to fetch brands data via AJAX and populate DataTable
             var table = $('#userTabel').DataTable({
-                ajax: "{{ route('admin.customer.index') }}",
+                ajax: "{{ route('admin.customers.index') }}",
                 columns: [{
                         "data": "id"
                     },
@@ -193,6 +229,49 @@
                 var data = table.row(row).data(); // Assuming you're using DataTables
                 editMember(data);
             })
+
+            // Event handler for form submission
+            $('#submitCsv').on('click', function() {
+                // Disable the submit button
+                $(this).prop('disabled', true);
+                var formData = new FormData();
+
+                var file = $('#file')[0].files[0]; // Get the first file selected in the input element
+
+                if (file !== undefined) {
+                    formData.append('file', file);
+
+                }
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('admin.customer.import') }}", // Replace 'your.route.name' with the actual route name
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        // Handle success response
+                        toastr.success(response.message);
+                        $('#submitCsv').prop('disabled', false);
+                        $('#csvModal').modal(
+                            'hide'); // Hide the modal after successful submission
+                        table.ajax.reload();
+
+
+                    },
+                    error: function(xhr) {
+                        // Handle error response
+                        console.log(xhr.responseText);
+                        $('#submitCsv').prop('disabled', false);
+                    }
+                });
+            });
 
 
             //Submit Data Modal

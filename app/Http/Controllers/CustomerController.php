@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Imports\UserImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CustomerController extends Controller
 {
@@ -69,5 +71,19 @@ class CustomerController extends Controller
             // Return an error response
             return response()->json(['error' => $ex->getMessage()], 500);
         }
+    }
+    //*** POST Request
+    public function import(Request $request)
+    {
+        set_time_limit(300);
+        // Validate the uploaded file
+        $request->validate([
+            'file' => 'required|mimes:csv,txt',
+        ]);
+
+        // Import the file
+        Excel::import(new UserImport, $request->file('file'));
+        // Return a response if needed
+        return response()->json(['message' => 'User Imported successfully'], 200);
     }
 }

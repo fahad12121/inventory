@@ -114,8 +114,8 @@
                                         <div class="col-md-4">
                                             <label for="branch_id" class="form-label">Select Branch</label> <span
                                                 class="text-danger">*</span>
-                                            <select name="branch_id" id="branch_id" class="select2 form-control">
-                                                <option value="" selected disabled>--Select--</option>
+                                            <select name="branch_id" id="branch_id" title="--Select--" class="selectpicker"
+                                                data-live-search="true">
                                                 @foreach ($branches as $item)
                                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                 @endforeach
@@ -125,8 +125,7 @@
                                         <div class="col-md-4">
                                             <label for="sender_id" class="form-label">Select Sender</label> <span
                                                 class="text-danger">*</span>
-                                            <select name="sender_id" id="sender_id" class="select2 form-control">
-                                                <option value="" selected disabled>--Select--</option>
+                                            <select name="sender_id" id="sender_id" title="--Select--" class="selectpicker">
                                                 @foreach ($sedRec as $item)
                                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                 @endforeach
@@ -139,8 +138,7 @@
                                         <div class="col-md-4 mt-2">
                                             <label for="receiver_id" class="form-label">Select Receiver</label> <span
                                                 class="text-danger">*</span>
-                                            <select name="receiver_id" id="receiver_id" class="select2 form-control">
-                                                <option value="" selected disabled>--Select--</option>
+                                            <select name="receiver_id" id="receiver_id" title="--Select--" class="selectpicker" data-live-search="true">
                                                 @foreach ($sedRec as $item)
                                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                 @endforeach
@@ -268,7 +266,7 @@
                         var statusText = row.is_branch_issued ? 'Issued' : 'Not Issued';
                         return `<span class="badge rounded-pill bg-${badgeClass}">${statusText}</span>`;
                     }
-                }, 
+                },
                 {
                     "data": "branch_issued_at"
                 },

@@ -89,8 +89,7 @@
                                     <div class="col-md-4">
                                         <label for="category_id" class="form-label">Select Category</label> <span
                                             class="text-danger">*</span>
-                                        <select name="category_id" id="category_id" class="form-control">
-                                            <option value="" selected disabled>--Select--</option>
+                                        <select name="category_id" id="category_id" title="--Select--" class="selectpicker" data-live-search="true">
                                             @foreach ($categories as $item)
                                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                                             @endforeach
@@ -100,7 +99,7 @@
                                     <div class="col-md-4">
                                         <label for="brand_id" class="form-label">Select Brand</label> <span
                                             class="text-danger">*</span>
-                                        <select name="brand_id" id="brand_id" class="form-control parentcategoryselect">
+                                        <select name="brand_id" id="brand_id" title="--Select--" class="selectpicker" data-live-search="true">
                                             <option value="" selected disabled>--Select--</option>
                                             @foreach ($brands as $item)
                                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -250,8 +249,6 @@
                     }
                 });
             });
-
-
 
             // Function to fetch brands data via AJAX and populate DataTable
             var table = $('#productTabel').DataTable({
