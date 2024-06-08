@@ -42,6 +42,7 @@
                                                 <tr>
                                                     <th>ID</th>
                                                     <th>Name</th>
+                                                    <th>Company</th>
                                                     <th>Phone</th>
                                                     <th>Status</th>
                                                     <th>Actions</th>
@@ -200,6 +201,9 @@
                     },
                     {
                         "data": "name"
+                    },
+                    {
+                        "data": "company_name"
                     },
                     {
                         "data": "phone"

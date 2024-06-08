@@ -189,7 +189,16 @@
                                                         @if ($leave_office && $reach_destination) value="{{ $leave_office->updated_at->diffInMinutes($reach_destination->updated_at) }} minutes" @endif>
                                                 </div>
                                             </div>
-
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Voice Note</label>
+                                                    <audio id="savedAudio" controls>
+                                                        <source src="{{ asset('/' . $order->note) }}"
+                                                            type="audio/wav">
+                                                        Your browser does not support the audio element.
+                                                    </audio>
+                                                </div>
+                                            </div>
                                         </div>
                                         <br>
                                         <h4 class="card-title">Order Tracking</h4>
@@ -197,21 +206,27 @@
                                             @php
                                                 $statuses = [
                                                     'start' => $order->statuses->where('status_id', 1)->last() ?? null,
-                                                    'preparing' => $order->statuses->where('status_id', 2)->last() ?? null,
-                                                    'delivery' => $order->statuses->where('status_id', 3)->last() ?? null,
-                                                    'installation' => $order->statuses->where('status_id', 4)->last() ?? null,
-                                                    'integration' => $order->statuses->where('status_id', 5)->last() ?? null,
+                                                    'preparing' =>
+                                                        $order->statuses->where('status_id', 2)->last() ?? null,
+                                                    'delivery' =>
+                                                        $order->statuses->where('status_id', 3)->last() ?? null,
+                                                    'installation' =>
+                                                        $order->statuses->where('status_id', 4)->last() ?? null,
+                                                    'integration' =>
+                                                        $order->statuses->where('status_id', 5)->last() ?? null,
                                                     'close' => $order->statuses->where('status_id', 6)->last() ?? null,
                                                 ];
                                             @endphp
-                                        
+
                                             @foreach ($statuses as $status => $record)
-                                                <div class="step {{ $record != null ? ($status == 'start' ? 'active' : 'completed') : '' }}">
+                                                <div
+                                                    class="step {{ $record != null ? ($status == 'start' ? 'active' : 'completed') : '' }}">
                                                     <b>{{ ucfirst($status) }}</b>
                                                     <div></div>
                                                     <span>
                                                         @if ($record != null)
-                                                            <date class="active-status" data-updated-at="{{ strtotime($record->updated_at) }}">
+                                                            <date class="active-status"
+                                                                data-updated-at="{{ strtotime($record->updated_at) }}">
                                                                 {{ date('Y-m-d, D, h:i A', strtotime($record->updated_at)) }}
                                                             </date>
                                                         @endif
@@ -244,9 +259,9 @@
                                         <h4 class="card-title">Order Image or PDF</h4>
                                         <div class="row g-3 mt-2">
                                             <div class="col-md-6">
-                                                
+
                                                 <?php
-                                                $filePath = asset('orders/'.$order->file);
+                                                $filePath = asset('orders/' . $order->file);
                                                 
                                                 // Get the file extension
                                                 $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);

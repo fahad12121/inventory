@@ -51,12 +51,18 @@ class OrderController extends Controller
             $order->vehicles = $request->vehicles;
             $order->location = $request->location;
             $order->date = $request->date;
-            $order->note = $request->note;
             $order->order_type = $request->order_type;
 
             // Handle image upload
             if ($request->hasFile('file')) {
                 $order->file = $order->uploadImg($request->file('file'));
+            }
+ 
+            if ($request->hasFile('audioFile')) {
+                $file = $request->file('audioFile');
+                $filename = uniqid() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('orders'), $filename);
+                $order->note = 'orders/' . $filename;
             }
             $order->save();
 

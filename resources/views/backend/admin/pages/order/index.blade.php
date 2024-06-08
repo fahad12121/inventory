@@ -164,16 +164,18 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>Note</label>
-                                            <textarea type="text" name="note" id="note" rows="5" name="note" class="form-control"
-                                                placeholder="Enter note..."></textarea>
+                                            <label>Record Voice Note</label><br>
+                                            <audio id="audioPlayback" class="form-control"  controls style="display:none;"></audio>
+                                            <button id="recordButton" class="btn btn-outline-primary mt-2"><i class="la la-microphone"></i></button>
+                                            <button id="stopButton" class="btn btn-outline-danger mt-2" disabled><i class="la la-microphone-slash"></i></button>
+                                            <input type="hidden" id="audioFile" name="audioFile">
                                         </div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
 
-                                <button type="button" id="submitForm" class="btn btn-outline-primary">Submit</button>
+                                <button  id="submitForm" class="btn btn-outline-primary">Submit</button>
                             </div>
                         </div>
                     </div>
@@ -222,6 +224,10 @@
 @endsection
 @section('scripts')
     <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        let audioBlob;
+
         const addModal = () => {
             $('#myModalLabel1').text('Add Order');
             $('#vehicles').val('');
@@ -642,21 +648,97 @@
                 });
             }
 
-            //Submit Data Modal
-            $('#submitForm').on('click', function() {
-                var btn = $(this); // Cache the button element
+            $('#recordButton').on('click', function(event) {
+                event.preventDefault();
+                startRecording();
+            });
+
+            $('#stopButton').on('click', function(event) {
+                event.preventDefault();
+                stopRecording();
+            });
+
+            $('#submitForm').on('click', function(event) {
+                event.preventDefault();
+                submitForm();
+            });
+
+            function startRecording() {
+                audioChunks = [];
+                navigator.mediaDevices.getUserMedia({
+                        audio: true
+                    })
+                    .then(stream => {
+                        mediaRecorder = new MediaRecorder(stream);
+                        mediaRecorder.start();
+
+                        mediaRecorder.ondataavailable = event => {
+                            audioChunks.push(event.data);
+                        };
+
+                        $('#recordButton').prop('disabled', true);
+                        $('#stopButton').prop('disabled', false);
+                    })
+                    .catch(error => {
+                        console.error('Error accessing audio media: ', error);
+                    });
+            }
+
+            function stopRecording() {
+                mediaRecorder.stop();
+                mediaRecorder.onstop = () => {
+                    audioBlob = new Blob(audioChunks, {
+                        type: 'audio/wav'
+                    });
+                    let audioUrl = URL.createObjectURL(audioBlob);
+                    $('#audioPlayback').attr('src', audioUrl).show();
+
+                    $('#recordButton').prop('disabled', false);
+                    $('#stopButton').prop('disabled', true);
+                };
+            }
+
+            function submitForm() {
+                var btn = $('#submitForm'); // Cache the button element
 
                 // Disable the button to prevent multiple submissions
                 btn.prop('disabled', true);
 
                 var formData = new FormData();
 
-                $('#vehicles, #service_id, #location, #date, #order_type, #note').each(function() {
-                    formData.append($(this).attr('id'), $(this).val());
+                var valid = true;
+                var errorMessage = '';
+
+                var requiredFields = ['#vehicles', '#service_id', '#location', '#date', '#order_type'];
+
+                requiredFields.forEach(function(field) {
+                    var element = $(field);
+                    if (element.val() === '') {
+                        valid = false;
+                        var fieldName = element.attr('id').replace('_',
+                        ' '); // Replace underscores with spaces for readability
+                        errorMessage += 'The ' + fieldName + ' field is required.<br>';
+                        element.addClass('is-invalid'); // Add Bootstrap invalid class for styling
+                    } else {
+                        formData.append(element.attr('id'), element.val());
+                        element.removeClass('is-invalid'); // Remove invalid class if value is present
+                    }
                 });
 
                 var file = $('#file')[0].files[0];
                 if (file) formData.append('file', file);
+
+                // Append recorded audio if available
+                if (audioBlob) {
+                    formData.append('audioFile', audioBlob, 'voice-note.wav');
+                }
+
+                if (!valid) {
+                    // Show error message and re-enable the button
+                    toastr.error(errorMessage);
+                    btn.prop('disabled', false);
+                    return;
+                }
 
                 $.ajaxSetup({
                     headers: {
@@ -687,7 +769,85 @@
                         btn.prop('disabled', false);
                     }
                 });
-            });
+            }
+
+            //Submit Data Modal
+            // $('#submitForm').on('click', function() {
+            //     var btn = $(this); // Cache the button element
+
+            //     // Disable the button to prevent multiple submissions
+            //     btn.prop('disabled', true);
+
+            //     var formData = new FormData();
+
+            //     var valid = true;
+            //     var errorMessage = '';
+
+            //     var requiredFields = ['#vehicles', '#service_id', '#location', '#date', '#order_type'];
+
+            //     requiredFields.forEach(function(field) {
+            //         var element = $(field);
+            //         if (element.val() === '') {
+            //             valid = false;
+            //             var fieldName = element.attr('id').replace('_',
+            //                 ' '); // Replace underscores with spaces for readability
+            //             errorMessage += 'The ' + fieldName + ' field is required.<br>';
+            //             element.addClass('is-invalid'); // Add Bootstrap invalid class for styling
+            //         } else {
+            //             formData.append(element.attr('id'), element.val());
+            //             element.removeClass(
+            //                 'is-invalid'); // Remove invalid class if value is present
+            //         }
+            //     });
+            //     // Append optional fields if provided
+            //     var note = $('#note').val();
+            //     if (note) formData.append('note', note);
+
+            //     var file = $('#file')[0].files[0];
+            //     if (file) formData.append('file', file);
+
+            //     // Append recorded audio if available
+            //     if (audioBlob) {
+            //         formData.append('audioFile', audioBlob, 'voice-note.wav');
+            //     }
+
+            //     if (!valid) {
+            //         // Show error message and re-enable the button
+            //         toastr.error(errorMessage);
+            //         btn.prop('disabled', false);
+            //         return;
+            //     }
+
+            //     $.ajaxSetup({
+            //         headers: {
+            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //         }
+            //     });
+
+            //     $.ajax({
+            //         url: "{{ route('admin.orderList.store') }}",
+            //         type: 'POST',
+            //         data: formData,
+            //         processData: false,
+            //         contentType: false,
+            //         success: function(response) {
+            //             // Handle success response
+            //             toastr.success(response.message);
+            //             table.ajax.reload();
+
+            //             // Hide the modal after successful submission
+            //             $('#default').modal('hide');
+            //         },
+            //         error: function(xhr) {
+            //             // Handle error response
+            //             console.log(xhr.responseText);
+            //         },
+            //         complete: function() {
+            //             // Re-enable the button after the AJAX request is complete
+            //             btn.prop('disabled', false);
+            //         }
+            //     });
+            // });
 
             // Function to replicate get_name logic
             function getStatusName(status_id) {

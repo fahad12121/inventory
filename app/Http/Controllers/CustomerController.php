@@ -17,7 +17,6 @@ class CustomerController extends Controller
         $customers = Auth::user()->customers;
         // return view('users.index', compact('customers'));
 
-
         return response()->json([
             "data" => $customers
         ]);

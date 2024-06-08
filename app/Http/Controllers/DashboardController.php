@@ -67,7 +67,7 @@ class DashboardController extends Controller
             ];
         } elseif ($role_name === 'User') {
 
-            $orders = Order::with('statuses')->where('customer_id', Auth->user()->id)->get();
+            $orders = Order::with('statuses')->where('customer_id', Auth::user()->id)->get();
             // Create an associative array to pass to the view
             $data = [
                 'orders' => $orders,
