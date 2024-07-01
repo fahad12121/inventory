@@ -60,7 +60,7 @@
                                         <div class="col-md-10">
                                             <h4 class="card-title">Orders</h4>
                                         </div>
-                                        @if (Auth::user()->role ? Auth::user()->role->name : '' === 'User')
+                                        @if (optional(Auth::user()->role)->name === 'User')
                                             <div class="col-md-2">
                                                 <button type="button" id="addBtn" class="btn btn-outline-primary block"
                                                     data-toggle="modal" data-target="#default" onclick="addModal()">
@@ -165,9 +165,12 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Record Voice Note</label><br>
-                                            <audio id="audioPlayback" class="form-control"  controls style="display:none;"></audio>
-                                            <button id="recordButton" class="btn btn-outline-primary mt-2"><i class="la la-microphone"></i></button>
-                                            <button id="stopButton" class="btn btn-outline-danger mt-2" disabled><i class="la la-microphone-slash"></i></button>
+                                            <audio id="audioPlayback" class="form-control" controls
+                                                style="display:none;"></audio>
+                                            <button id="recordButton" class="btn btn-outline-primary mt-2"><i
+                                                    class="la la-microphone"></i></button>
+                                            <button id="stopButton" class="btn btn-outline-danger mt-2" disabled><i
+                                                    class="la la-microphone-slash"></i></button>
                                             <input type="hidden" id="audioFile" name="audioFile">
                                         </div>
                                     </div>
@@ -175,7 +178,7 @@
                             </div>
                             <div class="modal-footer">
 
-                                <button  id="submitForm" class="btn btn-outline-primary">Submit</button>
+                                <button id="submitForm" class="btn btn-outline-primary">Submit</button>
                             </div>
                         </div>
                     </div>
@@ -716,7 +719,7 @@
                     if (element.val() === '') {
                         valid = false;
                         var fieldName = element.attr('id').replace('_',
-                        ' '); // Replace underscores with spaces for readability
+                            ' '); // Replace underscores with spaces for readability
                         errorMessage += 'The ' + fieldName + ' field is required.<br>';
                         element.addClass('is-invalid'); // Add Bootstrap invalid class for styling
                     } else {
